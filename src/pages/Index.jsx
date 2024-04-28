@@ -1,9 +1,14 @@
 // Complete the Index page component here
 // Use chakra-ui
-import { Box, Button, Text, VStack, useToast } from "@chakra-ui/react";
+import { Box, Button, Text, VStack, useToast, Input } from "@chakra-ui/react";
 import { FaMicrophone, FaPause, FaPlay, FaRedo, FaStop } from "react-icons/fa";
+import { useState } from "react";
 
 const Index = () => {
+  const [bottles, setBottles] = useState(0);
+  const [cans, setCans] = useState(0);
+  const [glassBottles, setGlassBottles] = useState(0);
+  const [currentCommand, setCurrentCommand] = useState("");
   const toast = useToast();
 
   // Simulated functions for voice commands
@@ -38,6 +43,10 @@ const Index = () => {
   };
 
   const resetCount = () => {
+    setBottles(0);
+    setCans(0);
+    setGlassBottles(0);
+    setCurrentCommand("reset");
     toast({
       title: "Count reset",
       description: "You can start over.",
@@ -62,6 +71,10 @@ const Index = () => {
       <Text fontSize="2xl" fontWeight="bold">
         Bottle, Cans, and Glass Bottle Counting App
       </Text>
+      <Input placeholder="Current Command" value={currentCommand} isReadOnly mt={4} mb={4} />
+      <Text>Bottles: {bottles}</Text>
+      <Text>Cans: {cans}</Text>
+      <Text>Glass Bottles: {glassBottles}</Text>
       <Box>
         <Button leftIcon={<FaMicrophone />} colorScheme="blue" onClick={startListening} m={2}>
           Start

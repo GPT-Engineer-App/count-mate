@@ -71,6 +71,29 @@ const Index = () => {
     });
   };
 
+  const incrementCount = (type) => {
+    switch (type) {
+      case "PET":
+        setPet(pet + 1);
+        break;
+      case "HDP":
+        setHdp(hdp + 1);
+        break;
+      case "Can":
+        setCan(can + 1);
+        break;
+      case "Glass":
+        setGlass(glass + 1);
+        break;
+      case "Carton":
+        setCarton(carton + 1);
+        break;
+      default:
+        break;
+    }
+    setCurrentCommand(`Incremented ${type}`);
+  };
+
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
       <Text fontSize="2xl" fontWeight="bold">
@@ -78,10 +101,15 @@ const Index = () => {
       </Text>
       <Input placeholder="Current Command" value={currentCommand} isReadOnly mt={4} mb={4} />
       <Text>PET: {pet}</Text>
+      <Button onClick={() => incrementCount("PET")}>Add PET</Button>
       <Text>HDP: {hdp}</Text>
+      <Button onClick={() => incrementCount("HDP")}>Add HDP</Button>
       <Text>Can: {can}</Text>
+      <Button onClick={() => incrementCount("Can")}>Add Can</Button>
       <Text>Glass: {glass}</Text>
+      <Button onClick={() => incrementCount("Glass")}>Add Glass</Button>
       <Text>Carton: {carton}</Text>
+      <Button onClick={() => incrementCount("Carton")}>Add Carton</Button>
       <Box>
         <Button leftIcon={<FaMicrophone />} colorScheme="blue" onClick={startListening} m={2}>
           Start

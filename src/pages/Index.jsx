@@ -5,9 +5,11 @@ import { FaMicrophone, FaPause, FaPlay, FaRedo, FaStop } from "react-icons/fa";
 import { useState } from "react";
 
 const Index = () => {
-  const [bottles, setBottles] = useState(0);
-  const [cans, setCans] = useState(0);
-  const [glassBottles, setGlassBottles] = useState(0);
+  const [pet, setPet] = useState(0);
+  const [hdp, setHdp] = useState(0);
+  const [can, setCan] = useState(0);
+  const [glass, setGlass] = useState(0);
+  const [carton, setCarton] = useState(0);
   const [currentCommand, setCurrentCommand] = useState("");
   const toast = useToast();
 
@@ -43,9 +45,11 @@ const Index = () => {
   };
 
   const resetCount = () => {
-    setBottles(0);
-    setCans(0);
-    setGlassBottles(0);
+    setPet(0);
+    setHdp(0);
+    setCan(0);
+    setGlass(0);
+    setCarton(0);
     setCurrentCommand("reset");
     toast({
       title: "Count reset",
@@ -72,9 +76,11 @@ const Index = () => {
         Bottle, Cans, and Glass Bottle Counting App
       </Text>
       <Input placeholder="Current Command" value={currentCommand} isReadOnly mt={4} mb={4} />
-      <Text>Bottles: {bottles}</Text>
-      <Text>Cans: {cans}</Text>
-      <Text>Glass Bottles: {glassBottles}</Text>
+      <Text>PET: {pet}</Text>
+      <Text>HDP: {hdp}</Text>
+      <Text>Can: {can}</Text>
+      <Text>Glass: {glass}</Text>
+      <Text>Carton: {carton}</Text>
       <Box>
         <Button leftIcon={<FaMicrophone />} colorScheme="blue" onClick={startListening} m={2}>
           Start

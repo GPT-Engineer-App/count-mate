@@ -5,6 +5,7 @@ import { FaMicrophone, FaPause, FaPlay, FaRedo, FaStop } from "react-icons/fa";
 import { useState } from "react";
 
 const Index = () => {
+  // No change needed, confirming that state management is already set up for live updates
   const [pet, setPet] = useState(0);
   const [hdp, setHdp] = useState(0);
   const [can, setCan] = useState(0);

@@ -126,6 +126,15 @@ const Index = () => {
         <Button leftIcon={<FaStop />} colorScheme="purple" onClick={stopListening} m={2}>
           Stop
         </Button>
+        <Button
+          colorScheme="red"
+          onClick={() => {
+            localStorage.removeItem("auth");
+            window.location.reload();
+          }}
+        >
+          Logout
+        </Button>
       </Box>
     </VStack>
   );

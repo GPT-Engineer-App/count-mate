@@ -17,13 +17,14 @@ const Index = () => {
   // Simulated functions for voice commands
   const [recordedChunks, setRecordedChunks] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState(null);
 
   const startListening = () => {
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
-        const mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.start();
+        setMediaRecorder(new MediaRecorder(stream));
+        mediaRecorder.start(5000);
 
         const chunks = [];
         mediaRecorder.ondataavailable = (e) => {
@@ -96,6 +97,14 @@ const Index = () => {
   };
 
   const stopListening = () => {
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+      mediaRecorder.stop();
+      setIsRecording(false);
+    }
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+      mediaRecorder.stop();
+      setIsRecording(false);
+    }
     toast({
       title: "Listening stopped",
       description: "Counting session ended.",

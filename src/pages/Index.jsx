@@ -15,14 +15,48 @@ const Index = () => {
   const toast = useToast();
 
   // Simulated functions for voice commands
+  const [recordedChunks, setRecordedChunks] = useState([]);
+  const [isRecording, setIsRecording] = useState(false);
+
   const startListening = () => {
-    toast({
-      title: "Listening started",
-      description: "Start counting aloud.",
-      status: "info",
-      duration: 3000,
-      isClosable: true,
-    });
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream) => {
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.start();
+
+        const chunks = [];
+        mediaRecorder.ondataavailable = (e) => {
+          chunks.push(e.data);
+          if (mediaRecorder.state === "recording" && chunks.length >= 5) {
+            setRecordedChunks((prev) => [...prev, ...chunks]);
+            chunks.length = 0;
+          }
+        };
+
+        mediaRecorder.onstop = () => {
+          setRecordedChunks((prev) => [...prev, ...chunks]);
+        };
+
+        setIsRecording(true);
+        toast({
+          title: "Recording started",
+          description: "Microphone is active.",
+          status: "info",
+          duration: 3000,
+          isClosable: true,
+        });
+      })
+      .catch((error) => {
+        console.error("Error accessing the microphone: ", error);
+        toast({
+          title: "Error",
+          description: "Failed to access the microphone.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      });
   };
 
   const pauseListening = () => {
@@ -111,8 +145,8 @@ const Index = () => {
       <Text>Carton: {carton}</Text>
       <Button onClick={() => incrementCount("Carton")}>Add Carton</Button>
       <Box>
-        <Button leftIcon={<FaMicrophone />} colorScheme="blue" onClick={startListening} m={2}>
-          Start
+        <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={startListening} m={2}>
+          {isRecording ? "Recording..." : "Start"}
         </Button>
         <Button leftIcon={<FaPause />} colorScheme="orange" onClick={pauseListening} m={2}>
           Pause

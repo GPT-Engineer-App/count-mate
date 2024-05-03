@@ -98,13 +98,19 @@ const Index = () => {
 
   const [keywords, setKeywords] = useState([]);
 
+  function prepareAudioData(recordedChunks) {
+    const formData = new FormData();
+    recordedChunks.forEach((chunk, index) => {
+      formData.append(`audioChunk_${index}`, chunk, `chunk_${index}.mp3`);
+    });
+    return formData;
+  }
+
   const stopListening = async () => {
     if (mediaRecorder && mediaRecorder.state === "recording") {
       mediaRecorder.stop();
       setIsRecording(false);
-      const audioBlob = new Blob(recordedChunks, { type: "audio/wav" });
-      const formData = new FormData();
-      formData.append("file", audioBlob, "audio.mp3");
+      const formData = prepareAudioData(recordedChunks);
 
       try {
         const response = await fetch("/analyze-audio", {

@@ -1,6 +1,6 @@
 // Complete the Index page component here
 // Use chakra-ui
-import { Box, Button, Text, VStack, useToast, Input } from "@chakra-ui/react";
+import { Box, Button, Text, VStack, useToast, Input, Container, Wrap, Badge } from "@chakra-ui/react";
 import { FaMicrophone, FaPause, FaPlay, FaRedo, FaStop } from "react-icons/fa";
 import { useState } from "react";
 
@@ -171,49 +171,70 @@ const Index = () => {
   };
 
   return (
-    <VStack spacing={4} align="center" justify="center" height="100vh">
-      <Text fontSize="2xl" fontWeight="bold">
-        Bottle, Cans, and Glass Bottle Counting App
-      </Text>
-      <Input placeholder="Current Command" value={currentCommand} isReadOnly mt={4} mb={4} />
-      <Text>PET: {pet}</Text>
-      <Button onClick={() => incrementCount("PET")}>Add PET</Button>
-      <Text>HDP: {hdp}</Text>
-      <Button onClick={() => incrementCount("HDP")}>Add HDP</Button>
-      <Text>Can: {can}</Text>
-      <Button onClick={() => incrementCount("Can")}>Add Can</Button>
-      <Text>Glass: {glass}</Text>
-      <Button onClick={() => incrementCount("Glass")}>Add Glass</Button>
-      <Text>Carton: {carton}</Text>
-      <Button onClick={() => incrementCount("Carton")}>Add Carton</Button>
-      <Box>
-        <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={startListening} m={2}>
-          {isRecording ? "Recording..." : "Start"}
-        </Button>
-        <Button leftIcon={<FaPause />} colorScheme="orange" onClick={pauseListening} m={2}>
-          Pause
-        </Button>
-        <Button leftIcon={<FaPlay />} colorScheme="green" onClick={resumeListening} m={2}>
-          Resume
-        </Button>
-        <Button leftIcon={<FaRedo />} colorScheme="red" onClick={resetCount} m={2}>
-          Reset
-        </Button>
-        <Button leftIcon={<FaStop />} colorScheme="purple" onClick={stopListening} m={2}>
-          Stop
-        </Button>
-        <Button
-          colorScheme="red"
-          onClick={() => {
-            localStorage.removeItem("auth");
-            window.location.reload();
-          }}
-        >
-          Logout
-        </Button>
-        <Text mt={4}>Detected Keywords: {keywords.join(", ")}</Text>
-      </Box>
-    </VStack>
+    <Container maxW="container.xl" p={5}>
+      <VStack spacing={4} align="center" justify="center">
+        <Text fontSize="2xl" fontWeight="bold">
+          Bottle, Cans, and Glass Bottle Counting App
+        </Text>
+        <Container centerContent p={4} bg="gray.100" borderRadius="lg">
+          <Input placeholder="Current Command" value={currentCommand} isReadOnly mt={4} mb={4} size="lg" focusBorderColor="blue.500" />
+          <Text>PET: {pet}</Text>
+          <Button onClick={() => incrementCount("PET")} size="lg" colorScheme="blue">
+            Add PET
+          </Button>
+          <Text>HDP: {hdp}</Text>
+          <Button onClick={() => incrementCount("HDP")} size="lg" colorScheme="blue">
+            Add HDP
+          </Button>
+          <Text>Can: {can}</Text>
+          <Button onClick={() => incrementCount("Can")} size="lg" colorScheme="blue">
+            Add Can
+          </Button>
+          <Text>Glass: {glass}</Text>
+          <Button onClick={() => incrementCount("Glass")} size="lg" colorScheme="blue">
+            Add Glass
+          </Button>
+          <Text>Carton: {carton}</Text>
+          <Button onClick={() => incrementCount("Carton")} size="lg" colorScheme="blue">
+            Add Carton
+          </Button>
+        </Container>
+        <Container centerContent p={4} bg="gray.200" borderRadius="lg">
+          <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={startListening} m={2} size="lg">
+            {isRecording ? "Recording..." : "Start"}
+          </Button>
+          <Button leftIcon={<FaPause />} colorScheme="orange" onClick={pauseListening} m={2} size="lg">
+            Pause
+          </Button>
+          <Button leftIcon={<FaPlay />} colorScheme="green" onClick={resumeListening} m={2} size="lg">
+            Resume
+          </Button>
+          <Button leftIcon={<FaRedo />} colorScheme="red" onClick={resetCount} m={2} size="lg">
+            Reset
+          </Button>
+          <Button leftIcon={<FaStop />} colorScheme="purple" onClick={stopListening} m={2} size="lg">
+            Stop
+          </Button>
+          <Button
+            colorScheme="red"
+            onClick={() => {
+              localStorage.removeItem("auth");
+              window.location.reload();
+            }}
+            size="lg"
+          >
+            Logout
+          </Button>
+          <Wrap mt={4}>
+            {keywords.map((keyword, index) => (
+              <Badge key={index} colorScheme="green" p={2} m={1} borderRadius="lg">
+                {keyword}
+              </Badge>
+            ))}
+          </Wrap>
+        </Container>
+      </VStack>
+    </Container>
   );
 };
 

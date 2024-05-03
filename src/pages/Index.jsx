@@ -104,7 +104,7 @@ const Index = () => {
       setIsRecording(false);
       const audioBlob = new Blob(recordedChunks, { type: "audio/wav" });
       const formData = new FormData();
-      formData.append("file", audioBlob);
+      formData.append("file", audioBlob, "audio.mp3");
 
       try {
         const response = await fetch("/analyze-audio", {

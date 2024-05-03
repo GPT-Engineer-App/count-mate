@@ -106,36 +106,40 @@ const Index = () => {
     return formData;
   }
 
+  async function sendAudioData(formData) {
+    try {
+      const response = await fetch("/analyze-audio", {
+        method: "POST",
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error sending audio data:", error);
+      toast({
+        title: "Error",
+        description: "Failed to send audio data.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }
+
   const stopListening = async () => {
     if (mediaRecorder && mediaRecorder.state === "recording") {
       mediaRecorder.stop();
       setIsRecording(false);
       const formData = prepareAudioData(recordedChunks);
-
-      try {
-        const response = await fetch("/analyze-audio", {
-          method: "POST",
-          body: formData,
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setKeywords(data);
-          toast({
-            title: "Analysis complete",
-            description: "Keywords have been updated.",
-            status: "success",
-            duration: 3000,
-            isClosable: true,
-          });
-        } else {
-          throw new Error("Failed to analyze audio");
-        }
-      } catch (error) {
-        console.error("Error during audio analysis: ", error);
+      const result = await sendAudioData(formData);
+      if (result && result.keywords) {
+        setKeywords(result.keywords);
         toast({
-          title: "Error",
-          description: "Failed to analyze audio.",
-          status: "error",
+          title: "Analysis complete",
+          description: "Keywords have been updated.",
+          status: "success",
           duration: 3000,
           isClosable: true,
         });

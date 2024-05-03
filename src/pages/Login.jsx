@@ -34,9 +34,11 @@ function Login() {
       }}
     >
       <div>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-        <button type="submit">Login</button>
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" bg="gray.100" p={2} borderRadius="md" />
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" bg="gray.100" p={2} borderRadius="md" />
+        <button type="submit" style={{ backgroundColor: "teal", color: "white", padding: "10px 20px", borderRadius: "5px" }}>
+          Login
+        </button>
       </div>
     </form>
   );

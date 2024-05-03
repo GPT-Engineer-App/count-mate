@@ -96,22 +96,45 @@ const Index = () => {
     });
   };
 
-  const stopListening = () => {
+  const [keywords, setKeywords] = useState([]);
+
+  const stopListening = async () => {
     if (mediaRecorder && mediaRecorder.state === "recording") {
       mediaRecorder.stop();
       setIsRecording(false);
+      const audioBlob = new Blob(recordedChunks, { type: "audio/wav" });
+      const formData = new FormData();
+      formData.append("file", audioBlob);
+
+      try {
+        const response = await fetch("/analyze-audio", {
+          method: "POST",
+          body: formData,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setKeywords(data);
+          toast({
+            title: "Analysis complete",
+            description: "Keywords have been updated.",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        } else {
+          throw new Error("Failed to analyze audio");
+        }
+      } catch (error) {
+        console.error("Error during audio analysis: ", error);
+        toast({
+          title: "Error",
+          description: "Failed to analyze audio.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     }
-    if (mediaRecorder && mediaRecorder.state === "recording") {
-      mediaRecorder.stop();
-      setIsRecording(false);
-    }
-    toast({
-      title: "Listening stopped",
-      description: "Counting session ended.",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
   };
 
   const incrementCount = (type) => {
@@ -178,6 +201,7 @@ const Index = () => {
         >
           Logout
         </Button>
+        <Text mt={4}>Detected Keywords: {keywords.join(", ")}</Text>
       </Box>
     </VStack>
   );

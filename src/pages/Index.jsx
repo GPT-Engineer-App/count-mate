@@ -99,7 +99,9 @@ const Index = () => {
       const updatedCounts = { ...prevCounts };
       keywords.forEach((keyword) => {
         const key = keyword.toUpperCase();
-        updatedCounts[key] = updatedCounts[key] + 1;
+        if (updatedCounts.hasOwnProperty(key)) {
+          updatedCounts[key] = updatedCounts[key] + 1;
+        }
       });
       return updatedCounts;
     });
@@ -260,7 +262,7 @@ const Index = () => {
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <Button onClick={installPWA} colorScheme="teal" size="lg" m={4}>
+      <Button onClick={installPWA} colorScheme="teal" size="lg" m={4} isDisabled={!window.deferredPrompt}>
         Install PWA
       </Button>
       <Text fontSize="2xl" fontWeight="bold">
@@ -299,7 +301,7 @@ const Index = () => {
         <Button onClick={stopRecording} colorScheme="red" m={2}>
           Stop
         </Button>
-        <Button onClick={resetCumulativeTally} colorScheme="yellow" m={2}>
+        <Button onClick={resetCount} colorScheme="yellow" m={2}>
           Reset Running Tallies
         </Button>
         <VStack>

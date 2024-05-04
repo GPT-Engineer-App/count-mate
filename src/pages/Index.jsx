@@ -44,9 +44,25 @@ const Index = () => {
         }
       };
 
-      recognitionInstance.onerror = (event) => {
-        console.error("Speech recognition error:", event.error);
-      };
+      try {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+          throw new Error("SpeechRecognition is not supported by this browser.");
+        }
+        const recognitionInstance = new SpeechRecognition();
+        recognitionInstance.continuous = true;
+        recognitionInstance.interimResults = true;
+        recognitionInstance.lang = "en-US";
+        recognitionInstance.onresult = (event) => {
+          const lastResult = event.results[event.resultIndex];
+          if (lastResult.isFinal) {
+            handleVoiceCommand(lastResult[0].transcript.trim().toLowerCase());
+          }
+        };
+        setRecognition(recognitionInstance);
+      } catch (error) {
+        console.error("SpeechRecognition setup failed:", error);
+      }
 
       setRecognition(recognitionInstance);
     }
@@ -99,7 +115,21 @@ const Index = () => {
     });
 
     setItemCounts(updatedCounts);
-    localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
+    try {
+      const keywords = transcript.toLowerCase().match(/\b(pet|hdp|can|glass|carton)\b/g) || [];
+      const updatedCounts = { ...itemCounts };
+
+      keywords.forEach((keyword) => {
+        if (updatedCounts.hasOwnProperty(keyword.toUpperCase())) {
+          updatedCounts[keyword.toUpperCase()]++;
+        }
+      });
+
+      setItemCounts(updatedCounts);
+      localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
+    } catch (error) {
+      console.error("Error processing keywords:", error);
+    }
   };
 
   const resetCount = () => {

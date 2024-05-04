@@ -11,7 +11,13 @@ const Index = () => {
     Carton: 0,
   });
   const [isRecording, setIsRecording] = useState(false);
-  const [cumulativeTally, setCumulativeTally] = useState(0);
+  const [cumulativeTally, setCumulativeTally] = useState({
+    PET: 0,
+    HDP: 0,
+    Can: 0,
+    Glass: 0,
+    Carton: 0,
+  });
   const [recognition, setRecognition] = useState(null);
   const toast = useToast();
 
@@ -56,8 +62,14 @@ const Index = () => {
     if (recognition) {
       setIsRecording(false);
       recognition.stop();
-      const total = itemCounts.PET + itemCounts.HDP + itemCounts.Can + itemCounts.Glass + itemCounts.Carton;
-      setCumulativeTally((prevTally) => prevTally + total);
+      setCumulativeTally((prevTally) => ({
+        ...prevTally,
+        PET: prevTally.PET + itemCounts.PET,
+        HDP: prevTally.HDP + itemCounts.HDP,
+        Can: prevTally.Can + itemCounts.Can,
+        Glass: prevTally.Glass + itemCounts.Glass,
+        Carton: prevTally.Carton + itemCounts.Carton,
+      }));
       toast({
         title: "Recording stopped",
         description: "Counting session ended and cumulative tally updated.",
@@ -118,6 +130,18 @@ const Index = () => {
     });
   };
 
+  const installPWA = () => {
+    if (window.deferredPrompt) {
+      window.deferredPrompt.prompt();
+      window.deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === "accepted") {
+          console.log("User accepted the A2HS prompt");
+        }
+        window.deferredPrompt = null;
+      });
+    }
+  };
+
   const pauseRecording = () => {
     if (recognition && isRecording) {
       setIsRecording(false);
@@ -131,6 +155,42 @@ const Index = () => {
       });
     }
   };
+
+  const handleVoiceCommand = (command) => {
+    switch (command) {
+      case "start":
+        startRecording();
+        break;
+      case "stop":
+        stopRecording();
+        break;
+      case "pause":
+        pauseRecording();
+        break;
+      default:
+        toast({
+          title: "Unrecognized command",
+          description: "Please say 'start', 'stop', or 'pause'.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+    }
+  };
+
+  useEffect(() => {
+    const recognitionInstance = new SpeechRecognition();
+    recognitionInstance.continuous = true;
+    recognitionInstance.interimResults = true;
+    recognitionInstance.lang = "en-US";
+    recognitionInstance.onresult = (event) => {
+      const lastResult = event.results[event.resultIndex];
+      if (lastResult.isFinal) {
+        handleVoiceCommand(lastResult[0].transcript.trim().toLowerCase());
+      }
+    };
+    setRecognition(recognitionInstance);
+  }, []);
 
   const resumeRecording = () => {
     if (recognition && !isRecording) {
@@ -166,6 +226,9 @@ const Index = () => {
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
+      <Button onClick={installPWA} colorScheme="teal" size="lg" m={4}>
+        Install PWA
+      </Button>
       <Text fontSize="2xl" fontWeight="bold">
         Bottle, Cans, and Glass Bottle Counting App
       </Text>
@@ -195,14 +258,20 @@ const Index = () => {
         <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={isRecording ? pauseRecording : resumeRecording} m={2}>
           {isRecording ? "Pause" : "Resume"}
         </Button>
-        <Button leftIcon={<FaRedo />} colorScheme="red" onClick={resetCount} m={2}>
-          Reset
+        <Button onClick={startRecording} colorScheme="green" m={2}>
+          Start
         </Button>
-        <Button onClick={exportData} colorScheme="green" m={2}>
-          Export Data
+        <Button onClick={stopRecording} colorScheme="red" m={2}>
+          Stop
         </Button>
-        <Button leftIcon={<FaRedo />} colorScheme="red" onClick={resetCount} m={2}>
-          Reset All
+        <Button onClick={pauseRecording} colorScheme="yellow" m={2}>
+          Pause
+        </Button>
+        <Button onClick={() => exportData("cumulative")} colorScheme="green" m={2}>
+          Export Cumulative Data
+        </Button>
+        <Button onClick={resetCumulativeTally} colorScheme="red" m={2}>
+          Reset Cumulative
         </Button>
         <Button onClick={startRecording} colorScheme="green" m={2}>
           Start

@@ -294,7 +294,14 @@ const Index = () => {
         <Button onClick={pauseRecording} colorScheme="yellow" m={2}>
           Pause
         </Button>
-        <Text>Cumulative Tally: {cumulativeTally}</Text>
+        <VStack>
+          <Text>Cumulative Tally:</Text>
+          <Text>PET: {cumulativeTally.PET}</Text>
+          <Text>HDP: {cumulativeTally.HDP}</Text>
+          <Text>Can: {cumulativeTally.Can}</Text>
+          <Text>Glass: {cumulativeTally.Glass}</Text>
+          <Text>Carton: {cumulativeTally.Carton}</Text>
+        </VStack>
         <Button onClick={() => exportData("cumulative")} colorScheme="green" m={2}>
           Export Cumulative Data
         </Button>

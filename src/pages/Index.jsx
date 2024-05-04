@@ -179,8 +179,8 @@ const Index = () => {
     }
   };
 
-  const handleVoiceCommand = (command) => {
-    const trimmedCommand = command.trim().toLowerCase();
+  const handleVoiceCommand = (transcript) => {
+    const trimmedCommand = transcript.trim().toLowerCase();
     const controlCommands = ["start", "stop", "pause", "resume"];
 
     if (controlCommands.includes(trimmedCommand)) {

@@ -168,7 +168,9 @@ const Index = () => {
 
   const handleVoiceCommand = (command) => {
     const trimmedCommand = command.trim().toLowerCase();
-    if (["start", "stop", "pause", "resume"].includes(trimmedCommand)) {
+    const controlCommands = ["start", "stop", "pause", "resume"];
+
+    if (controlCommands.includes(trimmedCommand)) {
       switch (trimmedCommand) {
         case "start":
           startRecording();

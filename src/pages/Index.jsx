@@ -62,8 +62,8 @@ const Index = () => {
       setIsRecording(true);
       recognition.start();
       toast({
-        title: "Recording started",
-        description: "Start counting aloud.",
+        title: "Recording Started",
+        description: "You may start speaking your counts now.",
         status: "info",
         duration: 3000,
         isClosable: true,
@@ -84,8 +84,8 @@ const Index = () => {
         Carton: prevTally.Carton + itemCounts.Carton,
       }));
       toast({
-        title: "Recording stopped",
-        description: "Counting session ended and cumulative tally updated.",
+        title: "Recording Stopped",
+        description: "The session has ended. Cumulative tally has been updated.",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -124,9 +124,9 @@ const Index = () => {
       Carton: 0,
     });
     toast({
-      title: "Count reset",
-      description: "You can start over.",
-      status: "error",
+      title: "Counts Reset",
+      description: "All running tallies have been reset. You can start a new session.",
+      status: "warning",
       duration: 3000,
       isClosable: true,
     });

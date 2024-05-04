@@ -193,6 +193,6 @@ const Index = () => {
       </Box>
     </VStack>
   );
-};
 
+};
 export default Index;

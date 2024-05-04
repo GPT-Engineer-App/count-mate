@@ -22,7 +22,11 @@ const Index = () => {
   const toast = useToast();
 
   useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+    if (!SpeechRecognition) {
+      console.error("SpeechRecognition is not supported by this browser.");
+      return;
+    }
     if (SpeechRecognition) {
       const recognitionInstance = new SpeechRecognition();
       recognitionInstance.continuous = true;
@@ -30,10 +34,14 @@ const Index = () => {
       recognitionInstance.lang = "en-US";
 
       recognitionInstance.onresult = (event) => {
-        const transcript = Array.from(event.results)
-          .map((result) => result[0].transcript)
-          .join("");
-        detectKeywords(transcript);
+        try {
+          const transcript = Array.from(event.results)
+            .map((result) => result[0].transcript)
+            .join("");
+          detectKeywords(transcript);
+        } catch (error) {
+          console.error("Error parsing speech recognition results:", error);
+        }
       };
 
       recognitionInstance.onerror = (event) => {

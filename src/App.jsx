@@ -6,7 +6,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route exact path="/" element={localStorage.getItem("auth") ? <Index /> : <Login />} />
+        <Route path="/" element={localStorage.getItem("auth") ? <Index /> : <Login />} />
       </Routes>
     </Router>
   );

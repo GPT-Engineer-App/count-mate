@@ -168,27 +168,23 @@ const Index = () => {
 
   const handleVoiceCommand = (command) => {
     const trimmedCommand = command.trim().toLowerCase();
-    switch (trimmedCommand) {
-      case "start":
-        startRecording();
-        break;
-      case "stop":
-        stopRecording();
-        break;
-      case "pause":
-        pauseRecording();
-        break;
-      case "resume":
-        resumeRecording();
-        break;
-      default:
-        toast({
-          title: "Unrecognized command",
-          description: `Received command: '${trimmedCommand}'. Please say 'start', 'stop', 'pause', or 'resume'.`,
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
+    if (["start", "stop", "pause", "resume"].includes(trimmedCommand)) {
+      switch (trimmedCommand) {
+        case "start":
+          startRecording();
+          break;
+        case "stop":
+          stopRecording();
+          break;
+        case "pause":
+          pauseRecording();
+          break;
+        case "resume":
+          resumeRecording();
+          break;
+      }
+    } else {
+      detectKeywords(trimmedCommand);
     }
   };
 

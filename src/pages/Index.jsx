@@ -1,6 +1,6 @@
 // Complete the Index page component here
 // Use chakra-ui
-import { Box, Button, Text, VStack, useToast, Input, Container, Wrap, Badge, Progress } from "@chakra-ui/react";
+import { Box, Button, Text, VStack, useToast, Input, Container, Wrap, Badge } from "@chakra-ui/react";
 import { FaMicrophone, FaPause, FaPlay, FaRedo, FaStop } from "react-icons/fa";
 import { useState } from "react";
 
@@ -212,12 +212,6 @@ const Index = () => {
           <Button leftIcon={<FaRedo />} colorScheme="red" onClick={resetCount} m={2} size="lg">
             Reset
           </Button>
-          <Container centerContent p={4} bg="teal.100" borderRadius="lg" mt={4}>
-            <Text mb={4} fontSize="lg" fontWeight="bold">
-              Drag and drop your audio file here
-            </Text>
-            <Progress colorScheme="teal" size="xs" isIndeterminate />
-          </Container>
           <Button leftIcon={<FaStop />} colorScheme="purple" onClick={stopListening} m={2} size="lg">
             Stop
           </Button>
@@ -232,13 +226,11 @@ const Index = () => {
             Logout
           </Button>
           <Wrap mt={4}>
-            <Wrap mt={4}>
-              {keywords.map((keyword, index) => (
-                <Badge key={index} colorScheme="green" p={2} m={1} borderRadius="lg" fontSize="md" variant="solid">
-                  {keyword}
-                </Badge>
-              ))}
-            </Wrap>
+            {keywords.map((keyword, index) => (
+              <Badge key={index} colorScheme="green" p={2} m={1} borderRadius="lg">
+                {keyword}
+              </Badge>
+            ))}
           </Wrap>
         </Container>
       </VStack>

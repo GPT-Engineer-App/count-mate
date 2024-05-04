@@ -285,21 +285,7 @@ const Index = () => {
         <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={isRecording ? pauseRecording : resumeRecording} m={2}>
           {isRecording ? "Pause" : "Resume"}
         </Button>
-        <Button onClick={startRecording} colorScheme="green" m={2}>
-          Start
-        </Button>
-        <Button onClick={stopRecording} colorScheme="red" m={2}>
-          Stop
-        </Button>
-        <Button onClick={pauseRecording} colorScheme="yellow" m={2}>
-          Pause
-        </Button>
-        <Button onClick={() => exportData("cumulative")} colorScheme="green" m={2}>
-          Export Cumulative Data
-        </Button>
-        <Button onClick={resetCumulativeTally} colorScheme="red" m={2}>
-          Reset Cumulative
-        </Button>
+
         <Button onClick={startRecording} colorScheme="green" m={2}>
           Start
         </Button>

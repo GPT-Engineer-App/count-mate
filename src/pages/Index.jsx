@@ -99,12 +99,12 @@ const Index = () => {
 
     keywords.forEach((keyword) => {
       const key = keyword.toUpperCase();
-      if (updatedCounts.hasOwnProperty(key)) {
-        updatedCounts[key]++;
+      if (["PET", "HDP", "CAN", "GLASS", "CARTON"].includes(key)) {
+        updatedCounts[key] = updatedCounts[key] + 1;
       }
     });
 
-    setItemCounts(updatedCounts);
+    setItemCounts({ ...updatedCounts });
     localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
     toast({
       title: "Tally Updated",

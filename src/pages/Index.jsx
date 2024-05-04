@@ -104,6 +104,45 @@ const Index = () => {
     });
   };
 
+  const pauseRecording = () => {
+    if (recognition && isRecording) {
+      setIsRecording(false);
+      recognition.stop();
+      toast({
+        title: "Recording paused",
+        description: "You can resume anytime.",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const resumeRecording = () => {
+    if (recognition && !isRecording) {
+      setIsRecording(true);
+      recognition.start();
+      toast({
+        title: "Recording resumed",
+        description: "Continue counting aloud.",
+        status: "info",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const exportData = () => {
+    const csvContent = `data:text/csv;charset=utf-8,PET,${itemCounts.PET}\nHDP,${itemCounts.HDP}\nCan,${itemCounts.Can}\nGlass,${itemCounts.Glass}\nCarton,${itemCounts.Carton}`;
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "tally_data.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const incrementCount = (type) => {
     setItemCounts((prevCounts) => ({
       ...prevCounts,
@@ -139,8 +178,14 @@ const Index = () => {
         </Button>
       </Box>
       <Box>
-        <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={isRecording ? stopRecording : startRecording} m={2}>
-          {isRecording ? "Stop" : "Start"}
+        <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={isRecording ? pauseRecording : resumeRecording} m={2}>
+          {isRecording ? "Pause" : "Resume"}
+        </Button>
+        <Button leftIcon={<FaRedo />} colorScheme="red" onClick={resetCount} m={2}>
+          Reset
+        </Button>
+        <Button onClick={exportData} colorScheme="green" m={2}>
+          Export Data
         </Button>
         <Button leftIcon={<FaRedo />} colorScheme="red" onClick={resetCount} m={2}>
           Reset

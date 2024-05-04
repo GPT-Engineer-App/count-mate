@@ -99,9 +99,7 @@ const Index = () => {
       const updatedCounts = { ...prevCounts };
       keywords.forEach((keyword) => {
         const key = keyword.toUpperCase();
-        if (["PET", "HDP", "CAN", "GLASS", "CARTON"].includes(key)) {
-          updatedCounts[key] = updatedCounts[key] + 1;
-        }
+        updatedCounts[key] = updatedCounts[key] + 1;
       });
       return updatedCounts;
     });
@@ -133,7 +131,13 @@ const Index = () => {
   };
 
   const resetCumulativeTally = () => {
-    setCumulativeTally(0);
+    setCumulativeTally({
+      PET: 0,
+      HDP: 0,
+      Can: 0,
+      Glass: 0,
+      Carton: 0,
+    });
     toast({
       title: "Cumulative tally reset",
       description: "Cumulative data has been cleared.",
@@ -295,8 +299,8 @@ const Index = () => {
         <Button onClick={stopRecording} colorScheme="red" m={2}>
           Stop
         </Button>
-        <Button onClick={pauseRecording} colorScheme="yellow" m={2}>
-          Pause
+        <Button onClick={resetCumulativeTally} colorScheme="yellow" m={2}>
+          Reset Running Tallies
         </Button>
         <VStack>
           <Text>Cumulative Tally:</Text>

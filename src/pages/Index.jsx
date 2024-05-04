@@ -3,41 +3,13 @@ import { FaMicrophone, FaRedo } from "react-icons/fa";
 import { useState, useEffect } from "react";
 
 const Index = () => {
-  const [itemCounts, setItemCounts] = useState({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
-  const [cumulativeCount, setCumulativeCount] = useState(0);
-
-  const resetCumulativeCount = () => {
-    setCumulativeCount(0);
-  };
-
-  const exportCumulativeData = () => {
-    const date = new Date();
-    const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-    const csvContent = `data:text/csv;charset=utf-8,Cumulative Count,${cumulativeCount}`;
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `cdscount-${formattedDate}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const stopRecording = () => {
-    if (recognition) {
-      setIsRecording(false);
-      recognition.stop();
-      toast({
-        title: "Recording stopped",
-        description: "Counting session ended.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-      const total = Object.values(itemCounts).reduce((acc, curr) => acc + curr, 0);
-      setCumulativeCount((prev) => prev + total);
-    }
-  };
+  const [itemCounts, setItemCounts] = useState({
+    PET: 0,
+    HDP: 0,
+    Can: 0,
+    Glass: 0,
+    Carton: 0,
+  });
   const [isRecording, setIsRecording] = useState(false);
   const [recognition, setRecognition] = useState(null);
   const toast = useToast();
@@ -79,7 +51,19 @@ const Index = () => {
     }
   };
 
-  
+  const stopRecording = () => {
+    if (recognition) {
+      setIsRecording(false);
+      recognition.stop();
+      toast({
+        title: "Recording stopped",
+        description: "Counting session ended.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
   const detectKeywords = (transcript) => {
     const keywords = transcript.toLowerCase().split(" ");
@@ -194,14 +178,17 @@ const Index = () => {
         </Button>
       </Box>
       <Box>
-        <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={isRecording ? pauseRecording : startRecording} m={2}>
-          {isRecording ? "Pause" : "Start"}
+        <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={isRecording ? pauseRecording : resumeRecording} m={2}>
+          {isRecording ? "Pause" : "Resume"}
         </Button>
-        <Button leftIcon={<FaRedo />} colorScheme="red" onClick={resetCumulativeCount} m={2}>
-          Reset Cumulative Count
+        <Button leftIcon={<FaRedo />} colorScheme="red" onClick={resetCount} m={2}>
+          Reset
         </Button>
-        <Button onClick={() => exportCumulativeData()} colorScheme="green" m={2}>
-          Export Cumulative Data
+        <Button onClick={exportData} colorScheme="green" m={2}>
+          Export Data
+        </Button>
+        <Button leftIcon={<FaRedo />} colorScheme="red" onClick={resetCount} m={2}>
+          Reset
         </Button>
       </Box>
     </VStack>

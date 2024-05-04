@@ -98,27 +98,14 @@ const Index = () => {
     const updatedCounts = { ...itemCounts };
 
     keywords.forEach((keyword) => {
-      if (updatedCounts.hasOwnProperty(keyword.toUpperCase())) {
-        updatedCounts[keyword.toUpperCase()]++;
+      const key = keyword.toUpperCase();
+      if (updatedCounts.hasOwnProperty(key)) {
+        updatedCounts[key]++;
       }
     });
 
     setItemCounts(updatedCounts);
-    try {
-      const keywords = transcript.toLowerCase().match(/\b(pet|hdp|can|glass|carton)\b/g) || [];
-      const updatedCounts = { ...itemCounts };
-
-      keywords.forEach((keyword) => {
-        if (updatedCounts.hasOwnProperty(keyword.toUpperCase())) {
-          updatedCounts[keyword.toUpperCase()]++;
-        }
-      });
-
-      setItemCounts(updatedCounts);
-      localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
-    } catch (error) {
-      console.error("Error processing keywords:", error);
-    }
+    localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
   };
 
   const resetCount = () => {
@@ -181,28 +168,27 @@ const Index = () => {
 
   const handleVoiceCommand = (command) => {
     const trimmedCommand = command.trim().toLowerCase();
-    try {
-      switch (trimmedCommand) {
-        case "start":
-          startRecording();
-          break;
-        case "stop":
-          stopRecording();
-          break;
-        case "pause":
-          pauseRecording();
-          break;
-        default:
-          toast({
-            title: "Unrecognized command",
-            description: `Received command: '${trimmedCommand}'. Please say 'start', 'stop', or 'pause'.`,
-            status: "error",
-            duration: 3000,
-            isClosable: true,
-          });
-      }
-    } catch (error) {
-      console.error("Error handling voice command:", error);
+    switch (trimmedCommand) {
+      case "start":
+        startRecording();
+        break;
+      case "stop":
+        stopRecording();
+        break;
+      case "pause":
+        pauseRecording();
+        break;
+      case "resume":
+        resumeRecording();
+        break;
+      default:
+        toast({
+          title: "Unrecognized command",
+          description: `Received command: '${trimmedCommand}'. Please say 'start', 'stop', 'pause', or 'resume'.`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
     }
   };
 

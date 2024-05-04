@@ -95,17 +95,17 @@ const Index = () => {
 
   const detectKeywords = (transcript) => {
     const keywords = transcript.toLowerCase().match(/\b(pet|hdp|can|glass|carton)\b/g) || [];
-    const updatedCounts = { ...itemCounts };
-
-    keywords.forEach((keyword) => {
-      const key = keyword.toUpperCase();
-      if (["PET", "HDP", "CAN", "GLASS", "CARTON"].includes(key)) {
-        updatedCounts[key] = updatedCounts[key] + 1;
-      }
+    setItemCounts((prevCounts) => {
+      const updatedCounts = { ...prevCounts };
+      keywords.forEach((keyword) => {
+        const key = keyword.toUpperCase();
+        if (["PET", "HDP", "CAN", "GLASS", "CARTON"].includes(key)) {
+          updatedCounts[key] = updatedCounts[key] + 1;
+        }
+      });
+      return updatedCounts;
     });
-
-    setItemCounts({ ...updatedCounts });
-    localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
+    localStorage.setItem("tallyLog", JSON.stringify(itemCounts));
     toast({
       title: "Tally Updated",
       description: `Updated counts: ${keywords.join(", ")}`,

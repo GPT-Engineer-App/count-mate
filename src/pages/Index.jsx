@@ -11,6 +11,7 @@ const Index = () => {
     Carton: 0,
   });
   const [isRecording, setIsRecording] = useState(false);
+  const [cumulativeTally, setCumulativeTally] = useState(0);
   const [recognition, setRecognition] = useState(null);
   const toast = useToast();
 
@@ -55,9 +56,11 @@ const Index = () => {
     if (recognition) {
       setIsRecording(false);
       recognition.stop();
+      const total = itemCounts.PET + itemCounts.HDP + itemCounts.Can + itemCounts.Glass + itemCounts.Carton;
+      setCumulativeTally((prevTally) => prevTally + total);
       toast({
         title: "Recording stopped",
-        description: "Counting session ended.",
+        description: "Counting session ended and cumulative tally updated.",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -98,6 +101,17 @@ const Index = () => {
     toast({
       title: "Count reset",
       description: "You can start over.",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+
+  const resetCumulativeTally = () => {
+    setCumulativeTally(0);
+    toast({
+      title: "Cumulative tally reset",
+      description: "Cumulative data has been cleared.",
       status: "error",
       duration: 3000,
       isClosable: true,
@@ -188,11 +202,26 @@ const Index = () => {
           Export Data
         </Button>
         <Button leftIcon={<FaRedo />} colorScheme="red" onClick={resetCount} m={2}>
-          Reset
+          Reset All
+        </Button>
+        <Button onClick={startRecording} colorScheme="green" m={2}>
+          Start
+        </Button>
+        <Button onClick={stopRecording} colorScheme="red" m={2}>
+          Stop
+        </Button>
+        <Button onClick={pauseRecording} colorScheme="yellow" m={2}>
+          Pause
+        </Button>
+        <Text>Cumulative Tally: {cumulativeTally}</Text>
+        <Button onClick={() => exportData("cumulative")} colorScheme="green" m={2}>
+          Export Cumulative Data
+        </Button>
+        <Button onClick={resetCumulativeTally} colorScheme="red" m={2}>
+          Reset Cumulative
         </Button>
       </Box>
     </VStack>
   );
-
 };
 export default Index;

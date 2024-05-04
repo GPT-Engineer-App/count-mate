@@ -195,17 +195,24 @@ const Index = () => {
   };
 
   useEffect(() => {
-    const recognitionInstance = new SpeechRecognition();
-    recognitionInstance.continuous = true;
-    recognitionInstance.interimResults = true;
-    recognitionInstance.lang = "en-US";
-    recognitionInstance.onresult = (event) => {
-      const lastResult = event.results[event.resultIndex];
-      if (lastResult.isFinal) {
-        handleVoiceCommand(lastResult[0].transcript.trim().toLowerCase());
-      }
-    };
-    setRecognition(recognitionInstance);
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+    if (!SpeechRecognition) {
+      console.error("SpeechRecognition is not supported by this browser.");
+      return;
+    }
+    if (SpeechRecognition) {
+      const recognitionInstance = new SpeechRecognition();
+      recognitionInstance.continuous = true;
+      recognitionInstance.interimResults = true;
+      recognitionInstance.lang = "en-US";
+      recognitionInstance.onresult = (event) => {
+        const lastResult = event.results[event.resultIndex];
+        if (lastResult.isFinal) {
+          handleVoiceCommand(lastResult[0].transcript.trim().toLowerCase());
+        }
+      };
+      setRecognition(recognitionInstance);
+    }
   }, []);
 
   const resumeRecording = () => {

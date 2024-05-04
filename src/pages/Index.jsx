@@ -89,20 +89,12 @@ const Index = () => {
   };
 
   const detectKeywords = (transcript) => {
-    const keywords = transcript.toLowerCase().split(" ");
+    const keywords = transcript.toLowerCase().match(/\b(pet|hdp|can|glass|carton)\b/g) || [];
     const updatedCounts = { ...itemCounts };
 
     keywords.forEach((keyword) => {
-      if (keyword === "pet") {
-        updatedCounts.PET++;
-      } else if (keyword === "hdp") {
-        updatedCounts.HDP++;
-      } else if (keyword === "can") {
-        updatedCounts.Can++;
-      } else if (keyword === "glass") {
-        updatedCounts.Glass++;
-      } else if (keyword === "carton") {
-        updatedCounts.Carton++;
+      if (updatedCounts.hasOwnProperty(keyword.toUpperCase())) {
+        updatedCounts[keyword.toUpperCase()]++;
       }
     });
 
@@ -169,8 +161,9 @@ const Index = () => {
   };
 
   const handleVoiceCommand = (command) => {
+    const trimmedCommand = command.trim().toLowerCase();
     try {
-      switch (command) {
+      switch (trimmedCommand) {
         case "start":
           startRecording();
           break;
@@ -183,7 +176,7 @@ const Index = () => {
         default:
           toast({
             title: "Unrecognized command",
-            description: "Please say 'start', 'stop', or 'pause'.",
+            description: `Received command: '${trimmedCommand}'. Please say 'start', 'stop', or 'pause'.`,
             status: "error",
             duration: 3000,
             isClosable: true,

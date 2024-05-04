@@ -52,6 +52,9 @@ function Login() {
       <Button type="submit" colorScheme="green" size="lg" fontSize="md">
         Login
       </Button>
+      <Button colorScheme="blue" size="lg" fontSize="md" onClick={() => alert("Facebook login simulated")}>
+        Login with Facebook
+      </Button>
     </VStack>
   );
 }

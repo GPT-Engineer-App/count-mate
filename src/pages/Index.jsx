@@ -1,92 +1,99 @@
-// Complete the Index page component here
-// Use chakra-ui
-import { Box, Button, Text, VStack, useToast, Input, Container, Wrap, Badge } from "@chakra-ui/react";
-import { FaMicrophone, FaPause, FaPlay, FaRedo, FaStop } from "react-icons/fa";
-import { useState } from "react";
+import { Box, Button, Text, VStack, useToast } from "@chakra-ui/react";
+import { FaMicrophone, FaRedo } from "react-icons/fa";
+import { useState, useEffect } from "react";
 
 const Index = () => {
-  // No change needed, confirming that state management is already set up for live updates
-  const [pet, setPet] = useState(0);
-  const [hdp, setHdp] = useState(0);
-  const [can, setCan] = useState(0);
-  const [glass, setGlass] = useState(0);
-  const [carton, setCarton] = useState(0);
-  const [currentCommand, setCurrentCommand] = useState("");
+  const [itemCounts, setItemCounts] = useState({
+    PET: 0,
+    HDP: 0,
+    Can: 0,
+    Glass: 0,
+    Carton: 0
+  });
+  const [isRecording, setIsRecording] = useState(false);
+  const [recognition, setRecognition] = useState(null);
   const toast = useToast();
 
-  // Simulated functions for voice commands
-  const [recordedChunks, setRecordedChunks] = useState([]);
-  const [isRecording, setIsRecording] = useState(false);
-  const [mediaRecorder, setMediaRecorder] = useState(null);
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognitionInstance = new SpeechRecognition();
+      recognitionInstance.continuous = true;
+      recognitionInstance.interimResults = true;
+      recognitionInstance.lang = 'en-US';
 
-  const startListening = () => {
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((stream) => {
-        setMediaRecorder(new MediaRecorder(stream));
-        mediaRecorder.start(5000);
+      recognitionInstance.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map((result) => result[0].transcript)
+          .join('');
+        detectKeywords(transcript);
+      };
 
-        const chunks = [];
-        mediaRecorder.ondataavailable = (e) => {
-          chunks.push(e.data);
-          if (mediaRecorder.state === "recording" && chunks.length >= 5) {
-            setRecordedChunks((prev) => [...prev, ...chunks]);
-            chunks.length = 0;
-          }
-        };
+      recognitionInstance.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+      };
 
-        mediaRecorder.onstop = () => {
-          setRecordedChunks((prev) => [...prev, ...chunks]);
-        };
+      setRecognition(recognitionInstance);
+    }
+  }, []);
 
-        setIsRecording(true);
-        toast({
-          title: "Recording started",
-          description: "Microphone is active.",
-          status: "info",
-          duration: 3000,
-          isClosable: true,
-        });
-      })
-      .catch((error) => {
-        console.error("Error accessing the microphone: ", error);
-        toast({
-          title: "Error",
-          description: "Failed to access the microphone.",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
+  const startRecording = () => {
+    if (recognition) {
+      setIsRecording(true);
+      recognition.start();
+      toast({
+        title: "Recording started",
+        description: "Start counting aloud.",
+        status: "info",
+        duration: 3000,
+        isClosable: true,
       });
+    }
   };
 
-  const pauseListening = () => {
-    toast({
-      title: "Listening paused",
-      description: "You can resume anytime.",
-      status: "warning",
-      duration: 3000,
-      isClosable: true,
-    });
+  const stopRecording = () => {
+    if (recognition) {
+      setIsRecording(false);
+      recognition.stop();
+      toast({
+        title: "Recording stopped",
+        description: "Counting session ended.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
-  const resumeListening = () => {
-    toast({
-      title: "Listening resumed",
-      description: "Continue counting.",
-      status: "info",
-      duration: 3000,
-      isClosable: true,
+  const detectKeywords = (transcript) => {
+    const keywords = transcript.toLowerCase().split(" ");
+    const updatedCounts = { ...itemCounts };
+
+    keywords.forEach((keyword) => {
+      if (keyword === "pet") {
+        updatedCounts.PET++;
+      } else if (keyword === "hdp") {
+        updatedCounts.HDP++;
+      } else if (keyword === "can") {
+        updatedCounts.Can++;
+      } else if (keyword === "glass") {
+        updatedCounts.Glass++;
+      } else if (keyword === "carton") {
+        updatedCounts.Carton++;
+      }
     });
+
+    setItemCounts(updatedCounts);
   };
 
   const resetCount = () => {
-    setPet(0);
-    setHdp(0);
-    setCan(0);
-    setGlass(0);
-    setCarton(0);
-    setCurrentCommand("reset");
+    setItemCounts({
+      PET: 0,
+      HDP: 0,
+      Can: 0,
+      Glass: 0,
+      Carton: 0
+    });
     toast({
       title: "Count reset",
       description: "You can start over.",
@@ -96,143 +103,54 @@ const Index = () => {
     });
   };
 
-  const [keywords, setKeywords] = useState([]);
-
-  function prepareAudioData(recordedChunks) {
-    const formData = new FormData();
-    recordedChunks.forEach((chunk, index) => {
-      formData.append(`audioChunk_${index}`, chunk, `chunk_${index}.mp3`);
-    });
-    return formData;
-  }
-
-  async function sendAudioData(formData) {
-    try {
-      const response = await fetch("/analyze-audio", {
-        method: "POST",
-        body: formData,
-      });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return await response.json();
-    } catch (error) {
-      console.error("Error sending audio data:", error);
-      toast({
-        title: "Error",
-        description: "Failed to send audio data.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  }
-
-  const stopListening = async () => {
-    if (mediaRecorder && mediaRecorder.state === "recording") {
-      mediaRecorder.stop();
-      setIsRecording(false);
-      const formData = prepareAudioData(recordedChunks);
-      const keywordsDetected = ["PET", "HDP", "Can", "Glass", "Carton"].filter((keyword) => recordedChunks.some((chunk) => new TextDecoder().decode(chunk).toLowerCase().includes(keyword.toLowerCase())));
-      setKeywords(keywordsDetected);
-      toast({
-        title: "Analysis complete",
-        description: "Keywords have been updated: " + keywordsDetected.join(", "),
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
-
   const incrementCount = (type) => {
-    switch (type) {
-      case "PET":
-        setPet(pet + 1);
-        break;
-      case "HDP":
-        setHdp(hdp + 1);
-        break;
-      case "Can":
-        setCan(can + 1);
-        break;
-      case "Glass":
-        setGlass(glass + 1);
-        break;
-      case "Carton":
-        setCarton(carton + 1);
-        break;
-      default:
-        break;
-    }
-    setCurrentCommand(`Incremented ${type}`);
+    setItemCounts((prevCounts) => ({
+      ...prevCounts,
+      [type]: prevCounts[type] + 1,
+    }));
   };
 
   return (
-    <Container maxW="container.xl" p={5}>
-      <VStack spacing={4} align="center" justify="center">
-        <Text fontSize="2xl" fontWeight="bold">
-          Bottle, Cans, and Glass Bottle Counting App
-        </Text>
-        <Container centerContent p={4} bg="gray.100" borderRadius="lg">
-          <Input placeholder="Current Command" value={currentCommand} isReadOnly mt={4} mb={4} size="lg" focusBorderColor="blue.500" />
-          <Text>PET: {pet}</Text>
-          <Button onClick={() => incrementCount("PET")} size="lg" colorScheme="blue">
-            Add PET
-          </Button>
-          <Text>HDP: {hdp}</Text>
-          <Button onClick={() => incrementCount("HDP")} size="lg" colorScheme="blue">
-            Add HDP
-          </Button>
-          <Text>Can: {can}</Text>
-          <Button onClick={() => incrementCount("Can")} size="lg" colorScheme="blue">
-            Add Can
-          </Button>
-          <Text>Glass: {glass}</Text>
-          <Button onClick={() => incrementCount("Glass")} size="lg" colorScheme="blue">
-            Add Glass
-          </Button>
-          <Text>Carton: {carton}</Text>
-          <Button onClick={() => incrementCount("Carton")} size="lg" colorScheme="blue">
-            Add Carton
-          </Button>
-        </Container>
-        <Container centerContent p={4} bg="gray.200" borderRadius="lg">
-          <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={startListening} m={2} size="lg">
-            {isRecording ? "Recording..." : "Start"}
-          </Button>
-          <Button leftIcon={<FaPause />} colorScheme="orange" onClick={pauseListening} m={2} size="lg">
-            Pause
-          </Button>
-          <Button leftIcon={<FaPlay />} colorScheme="green" onClick={resumeListening} m={2} size="lg">
-            Resume
-          </Button>
-          <Button leftIcon={<FaRedo />} colorScheme="red" onClick={resetCount} m={2} size="lg">
-            Reset
-          </Button>
-          <Button leftIcon={<FaStop />} colorScheme="purple" onClick={stopListening} m={2} size="lg">
-            Stop
-          </Button>
-          <Button
-            colorScheme="red"
-            onClick={() => {
-              localStorage.removeItem("auth");
-              window.location.reload();
-            }}
-            size="lg"
-          >
-            Logout
-          </Button>
-          <Wrap mt={4}>
-            {keywords.map((keyword, index) => (
-              <Badge key={index} colorScheme="green" p={2} m={1} borderRadius="lg">
-                {keyword}
-              </Badge>
-            ))}
-          </Wrap>
-        </Container>
-      </VStack>
-    </Container>
+    <VStack spacing={4} align="center" justify="center" height="100vh">
+      <Text fontSize="2xl" fontWeight="bold">
+        Bottle, Cans, and Glass Bottle Counting App
+      </Text>
+      <Box>
+        <Text>PET: {itemCounts.PET}</Text>
+        <Button onClick={() => incrementCount("PET")} size="lg" colorScheme="blue">
+          Add PET
+        </Button>
+        <Text>HDP: {itemCounts.HDP}</Text>
+        <Button onClick={() => incrementCount("HDP")} size="lg" colorScheme="blue">
+          Add HDP
+        </Button>
+        <Text>Can: {itemCounts.Can}</Text>
+        <Button onClick={() => incrementCount("Can")} size="lg" colorScheme="blue">
+          Add Can
+        </Button>
+        <Text>Glass: {itemCounts.Glass}</Text>
+        <Button onClick={() => incrementCount("Glass")} size="lg" colorScheme="blue">
+          Add Glass
+        </Button>
+        <Text>Carton: {itemCounts.Carton}</Text>
+        <Button onClick={() => incrementCount("Carton")} size="lg" colorScheme="blue">
+          Add Carton
+        </Button>
+      </Box>
+      <Box>
+        <Button
+          leftIcon={<FaMicrophone />}
+          colorScheme={isRecording ? "red" : "blue"}
+          onClick={isRecording ? stopRecording : startRecording}
+          m={2}
+        >
+          {isRecording ? "Stop" : "Start"}
+        </Button>
+        <Button leftIcon={<FaRedo />} colorScheme="red" onClick={resetCount} m={2}>
+          Reset
+        </Button>
+      </Box>
+    </VStack>
   );
 };
 

@@ -22,49 +22,38 @@ const Index = () => {
   const toast = useToast();
 
   useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
-    if (!SpeechRecognition) {
-      console.error("SpeechRecognition is not supported by this browser.");
-      return;
-    }
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
       const recognitionInstance = new SpeechRecognition();
       recognitionInstance.continuous = true;
       recognitionInstance.interimResults = true;
       recognitionInstance.lang = "en-US";
-
       recognitionInstance.onresult = (event) => {
-        try {
-          const transcript = Array.from(event.results)
-            .map((result) => result[0].transcript)
-            .join("");
-          detectKeywords(transcript);
-        } catch (error) {
-          console.error("Error parsing speech recognition results:", error);
+        const lastResult = event.results[event.resultIndex];
+        if (lastResult.isFinal) {
+          handleVoiceCommand(lastResult[0].transcript.trim().toLowerCase());
         }
       };
-
-      try {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SpeechRecognition) {
-          throw new Error("SpeechRecognition is not supported by this browser.");
-        }
-        const recognitionInstance = new SpeechRecognition();
-        recognitionInstance.continuous = true;
-        recognitionInstance.interimResults = true;
-        recognitionInstance.lang = "en-US";
-        recognitionInstance.onresult = (event) => {
-          const lastResult = event.results[event.resultIndex];
-          if (lastResult.isFinal) {
-            handleVoiceCommand(lastResult[0].transcript.trim().toLowerCase());
-          }
-        };
-        setRecognition(recognitionInstance);
-      } catch (error) {
-        console.error("SpeechRecognition setup failed:", error);
-      }
-
+      recognitionInstance.onerror = (event) => {
+        console.error("Speech recognition error:", event.error);
+        toast({
+          title: "Recognition Error",
+          description: `Error occurred: ${event.error}`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      };
       setRecognition(recognitionInstance);
+    } else {
+      console.error("SpeechRecognition is not supported by this browser.");
+      toast({
+        title: "Unsupported Feature",
+        description: "Speech recognition is not supported by your browser.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   }, []);
 

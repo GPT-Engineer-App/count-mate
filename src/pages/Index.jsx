@@ -131,14 +131,18 @@ const Index = () => {
   };
 
   const installPWA = () => {
-    if (window.deferredPrompt) {
-      window.deferredPrompt.prompt();
-      window.deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === "accepted") {
-          console.log("User accepted the A2HS prompt");
-        }
-        window.deferredPrompt = null;
-      });
+    try {
+      if (window.deferredPrompt) {
+        window.deferredPrompt.prompt();
+        window.deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === "accepted") {
+            console.log("User accepted the A2HS prompt");
+          }
+          window.deferredPrompt = null;
+        });
+      }
+    } catch (error) {
+      console.error("PWA installation failed:", error);
     }
   };
 
@@ -157,24 +161,28 @@ const Index = () => {
   };
 
   const handleVoiceCommand = (command) => {
-    switch (command) {
-      case "start":
-        startRecording();
-        break;
-      case "stop":
-        stopRecording();
-        break;
-      case "pause":
-        pauseRecording();
-        break;
-      default:
-        toast({
-          title: "Unrecognized command",
-          description: "Please say 'start', 'stop', or 'pause'.",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
+    try {
+      switch (command) {
+        case "start":
+          startRecording();
+          break;
+        case "stop":
+          stopRecording();
+          break;
+        case "pause":
+          pauseRecording();
+          break;
+        default:
+          toast({
+            title: "Unrecognized command",
+            description: "Please say 'start', 'stop', or 'pause'.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+      }
+    } catch (error) {
+      console.error("Error handling voice command:", error);
     }
   };
 
@@ -207,14 +215,18 @@ const Index = () => {
   };
 
   const exportData = () => {
-    const csvContent = `data:text/csv;charset=utf-8,PET,${itemCounts.PET}\nHDP,${itemCounts.HDP}\nCan,${itemCounts.Can}\nGlass,${itemCounts.Glass}\nCarton,${itemCounts.Carton}`;
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "tally_data.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    try {
+      const csvContent = `data:text/csv;charset=utf-8,PET,${itemCounts.PET}\nHDP,${itemCounts.HDP}\nCan,${itemCounts.Can}\nGlass,${itemCounts.Glass}\nCarton,${itemCounts.Carton}`;
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "tally_data.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Failed to export data:", error);
+    }
   };
 
   const incrementCount = (type) => {

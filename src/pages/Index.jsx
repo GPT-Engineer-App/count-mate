@@ -133,17 +133,15 @@ const Index = () => {
       mediaRecorder.stop();
       setIsRecording(false);
       const formData = prepareAudioData(recordedChunks);
-      const result = await sendAudioData(formData);
-      if (result && result.keywords) {
-        setKeywords(result.keywords);
-        toast({
-          title: "Analysis complete",
-          description: "Keywords have been updated.",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
+      const keywordsDetected = ["PET", "HDP", "Can", "Glass", "Carton"].filter((keyword) => recordedChunks.some((chunk) => new TextDecoder().decode(chunk).toLowerCase().includes(keyword.toLowerCase())));
+      setKeywords(keywordsDetected);
+      toast({
+        title: "Analysis complete",
+        description: "Keywords have been updated: " + keywordsDetected.join(", "),
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 

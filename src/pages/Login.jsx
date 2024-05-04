@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Box, Input, Button, FormControl, FormLabel, Text, VStack } from "@chakra-ui/react";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     const response = await fetch("https://pqpuuzpdmzabgmwyitrt.supabase.co/auth/v1/token?grant_type=password", {
       method: "POST",
       headers: {
@@ -16,6 +18,14 @@ function Login() {
       },
       body: JSON.stringify({ email, password }),
     });
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem("auth", JSON.stringify(data));
+      localStorage.setItem("loginTime", new Date().toISOString());
+      navigate("/");
+    } else {
+      alert("Login failed!");
+    }
 
     if (response.ok) {
       const data = await response.json();
@@ -27,18 +37,22 @@ function Login() {
   };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleLogin();
-      }}
-    >
-      <div>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-        <button type="submit">Login</button>
-      </div>
-    </form>
+    <VStack spacing={8} p={10} boxShadow="md" borderRadius="lg" bg="whiteAlpha.900">
+      <Text fontSize="3xl" fontFamily="Times New Roman" fontWeight="bold" color="green.600">
+        Welcome
+      </Text>
+      <FormControl isRequired>
+        <FormLabel>Email</FormLabel>
+        <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" />
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Password</FormLabel>
+        <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" />
+      </FormControl>
+      <Button type="submit" colorScheme="green" size="lg" fontSize="md">
+        Login
+      </Button>
+    </VStack>
   );
 }
 

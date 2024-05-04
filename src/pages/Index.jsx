@@ -8,7 +8,7 @@ const Index = () => {
     HDP: 0,
     Can: 0,
     Glass: 0,
-    Carton: 0
+    Carton: 0,
   });
   const [isRecording, setIsRecording] = useState(false);
   const [recognition, setRecognition] = useState(null);
@@ -20,17 +20,17 @@ const Index = () => {
       const recognitionInstance = new SpeechRecognition();
       recognitionInstance.continuous = true;
       recognitionInstance.interimResults = true;
-      recognitionInstance.lang = 'en-US';
+      recognitionInstance.lang = "en-US";
 
       recognitionInstance.onresult = (event) => {
         const transcript = Array.from(event.results)
           .map((result) => result[0].transcript)
-          .join('');
+          .join("");
         detectKeywords(transcript);
       };
 
       recognitionInstance.onerror = (event) => {
-        console.error('Speech recognition error:', event.error);
+        console.error("Speech recognition error:", event.error);
       };
 
       setRecognition(recognitionInstance);
@@ -84,6 +84,7 @@ const Index = () => {
     });
 
     setItemCounts(updatedCounts);
+    localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
   };
 
   const resetCount = () => {
@@ -92,7 +93,7 @@ const Index = () => {
       HDP: 0,
       Can: 0,
       Glass: 0,
-      Carton: 0
+      Carton: 0,
     });
     toast({
       title: "Count reset",
@@ -138,12 +139,7 @@ const Index = () => {
         </Button>
       </Box>
       <Box>
-        <Button
-          leftIcon={<FaMicrophone />}
-          colorScheme={isRecording ? "red" : "blue"}
-          onClick={isRecording ? stopRecording : startRecording}
-          m={2}
-        >
+        <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={isRecording ? stopRecording : startRecording} m={2}>
           {isRecording ? "Stop" : "Start"}
         </Button>
         <Button leftIcon={<FaRedo />} colorScheme="red" onClick={resetCount} m={2}>

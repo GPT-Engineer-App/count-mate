@@ -106,6 +106,13 @@ const Index = () => {
 
     setItemCounts(updatedCounts);
     localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
+    toast({
+      title: "Tally Updated",
+      description: `Updated counts: ${keywords.join(", ")}`,
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
   };
 
   const resetCount = () => {

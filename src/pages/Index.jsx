@@ -19,30 +19,8 @@ const Index = () => {
   const toast = useToast();
 
   useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      const recognitionInstance = new SpeechRecognition();
-      recognitionInstance.continuous = true;
-      recognitionInstance.interimResults = true;
-      recognitionInstance.lang = "en-US";
-      recognitionInstance.onresult = (event) => {
-        const lastResult = event.results[event.resultIndex];
-        if (lastResult.isFinal) {
-          detectKeywords(lastResult[0].transcript.trim().toLowerCase());
-        }
-      };
-      recognitionInstance.onerror = (event) => {
-        const errorMessage = `Speech recognition error: ${event.error}`;
-        toast({
-          title: "Recognition Error",
-          description: errorMessage,
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      };
-      setRecognition(recognitionInstance);
-    } else {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+    if (!SpeechRecognition) {
       console.error("SpeechRecognition is not supported by this browser.");
       toast({
         title: "Unsupported Feature",
@@ -51,7 +29,29 @@ const Index = () => {
         duration: 3000,
         isClosable: true,
       });
+      return;
     }
+    const recognitionInstance = new SpeechRecognition();
+    recognitionInstance.continuous = true;
+    recognitionInstance.interimResults = true;
+    recognitionInstance.lang = "en-US";
+    recognitionInstance.onresult = (event) => {
+      const lastResult = event.results[event.resultIndex];
+      if (lastResult.isFinal) {
+        detectKeywords(lastResult[0].transcript.trim().toLowerCase());
+      }
+    };
+    recognitionInstance.onerror = (event) => {
+      const errorMessage = `Speech recognition error: ${event.error}`;
+      toast({
+        title: "Recognition Error",
+        description: errorMessage,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    };
+    setRecognition(recognitionInstance);
   }, []);
 
   const startRecording = () => {

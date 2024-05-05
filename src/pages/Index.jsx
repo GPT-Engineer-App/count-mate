@@ -273,9 +273,9 @@ const Index = () => {
         <Button onClick={() => incrementCount("PET")} size="lg" colorScheme="blue">
           Add PET
         </Button>
-        <Text>HDP: {itemCounts.HDP}</Text>
-        <Button onClick={() => incrementCount("HDP")} size="lg" colorScheme="blue">
-          Add HDP
+        <Text>HD: {itemCounts.HD}</Text>
+        <Button onClick={() => incrementCount("HD")} size="lg" colorScheme="blue">
+          Add HD
         </Button>
         <Text>Can: {itemCounts.Can}</Text>
         <Button onClick={() => incrementCount("Can")} size="lg" colorScheme="blue">
@@ -291,8 +291,11 @@ const Index = () => {
         </Button>
       </Box>
       <Box>
-        <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={isRecording ? stopRecording : startRecording} m={2}>
-          {isRecording ? "Stop" : "Start/Pause"}
+        <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={isRecording ? pauseRecording : startRecording} m={2}>
+          {isRecording ? "Pause" : "Start"}
+        </Button>
+        <Button leftIcon={<FaRedo />} colorScheme="red" onClick={stopRecording} m={2}>
+          Stop
         </Button>
         <Button onClick={resetCount} colorScheme="yellow" m={2}>
           Reset Running Tallies

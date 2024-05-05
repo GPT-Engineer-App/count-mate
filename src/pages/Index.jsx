@@ -58,38 +58,49 @@ const Index = () => {
   };
 
   const detectKeywords = (transcript) => {
-    const keywordRegex = /\b(pet|hdp|can|glass|carton)\b/gi;
-    const matches = transcript.match(keywordRegex);
-    if (matches && matches.length) {
-      setSessionCounts((prevCounts) => {
-        const updatedCounts = { ...prevCounts };
-        matches.forEach((keyword) => {
-          updatedCounts[keyword] = (updatedCounts[keyword] || 0) + 1;
+    try {
+      const keywordRegex = /\b(pet|hdp|can|glass|carton)\b/gi;
+      const matches = transcript.match(keywordRegex);
+      if (matches && matches.length) {
+        setSessionCounts((prevCounts) => {
+          const updatedCounts = { ...prevCounts };
+          matches.forEach((keyword) => {
+            updatedCounts[keyword] = (updatedCounts[keyword] || 0) + 1;
+          });
+          return updatedCounts;
         });
-        return updatedCounts;
-      });
 
-      setCumulativeCounts((prevCounts) => {
-        const updatedCounts = { ...prevCounts };
-        matches.forEach((keyword) => {
-          updatedCounts[keyword] = (updatedCounts[keyword] || 0) + 1;
+        setCumulativeCounts((prevCounts) => {
+          const updatedCounts = { ...prevCounts };
+          matches.forEach((keyword) => {
+            updatedCounts[keyword] = (updatedCounts[keyword] || 0) + 1;
+          });
+          return updatedCounts;
         });
-        return updatedCounts;
-      });
-      localStorage.setItem("cumulativeTally", JSON.stringify(cumulativeCounts));
+        localStorage.setItem("cumulativeTally", JSON.stringify(cumulativeCounts));
+        toast({
+          title: "Keyword Detected",
+          description: `Updated counts for ${matches.join(", ")}.`,
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "No Keywords Detected",
+          description: "No valid keywords detected in the last speech segment.",
+          status: "warning",
+          duration: 2000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("Error in keyword detection:", error);
       toast({
-        title: "Keyword Detected",
-        description: `Updated counts for ${matches.join(", ")}.`,
-        status: "success",
-        duration: 2000,
-        isClosable: true,
-      });
-    } else {
-      toast({
-        title: "No Keywords Detected",
-        description: "No valid keywords detected in the last speech segment.",
-        status: "warning",
-        duration: 2000,
+        title: "Error",
+        description: "An error occurred during keyword detection.",
+        status: "error",
+        duration: 3000,
         isClosable: true,
       });
     }

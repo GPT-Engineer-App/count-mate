@@ -94,24 +94,26 @@ const Index = () => {
   };
 
   const detectKeywords = (transcript) => {
-    console.log("Received transcript:", transcript);
-    const keywords = transcript.toLowerCase().match(/\b(pet|hdp|can|glass|carton)\b/g) || [];
-    console.log("Detected keywords:", keywords);
+    console.log("Received transcript for processing:", transcript);
+    const words = transcript.toLowerCase().split(/\s+/);
+    const keywords = ["pet", "hdp", "can", "glass", "carton"];
     let updatesFound = false;
     const updatedCounts = { ...itemCounts };
 
-    keywords.forEach((keyword) => {
-      if (["pet", "hdp", "can", "glass", "carton"].includes(keyword)) {
-        updatedCounts[keyword]++;
+    words.forEach((word) => {
+      if (keywords.includes(word)) {
+        updatedCounts[word]++;
         updatesFound = true;
+        console.log(`Detected and updated count for ${word}`);
       }
     });
 
     if (updatesFound) {
+      console.log("Updates found, setting item counts and updating local storage.");
       setItemCounts(updatedCounts);
       localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
     } else {
-      console.log("No valid keywords detected, tally not updated.");
+      console.error("No valid keywords detected, tally not updated.");
     }
   };
 

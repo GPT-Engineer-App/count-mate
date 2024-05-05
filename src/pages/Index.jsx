@@ -93,7 +93,7 @@ const Index = () => {
   const detectKeywords = (transcript) => {
     console.log("Received transcript for processing:", transcript);
 
-    const matches = transcript.toLowerCase().match(/\b(pet|hd|can|glass|cart)\b/g) || [];
+    const matches = transcript.toLowerCase().match(/\b(pet|hdp|can|glass|carton)\b/g) || [];
     console.log("Detected keywords:", matches);
     let updatesFound = false;
     const updatedCounts = { ...itemCounts };
@@ -270,29 +270,25 @@ const Index = () => {
       </Text>
       <Box>
         <Text>PET: {itemCounts.PET}</Text>
-        <Button onClick={() => incrementCount("PET")} size="lg" colorScheme="blue">
-          Add PET
+        <Button onClick={() => incrementCount("PET")} size="lg" colorScheme="blue" m={2}>
+          Increment PET
         </Button>
-        <Text>HDP: {itemCounts.HDP}</Text>
-        <Button onClick={() => incrementCount("HDP")} size="lg" colorScheme="blue">
-          Add HDP
+        <Button onClick={() => incrementCount("HDP")} size="lg" colorScheme="blue" m={2}>
+          Increment HDP
         </Button>
-        <Text>Can: {itemCounts.Can}</Text>
-        <Button onClick={() => incrementCount("Can")} size="lg" colorScheme="blue">
-          Add Can
+        <Button onClick={() => incrementCount("Can")} size="lg" colorScheme="blue" m={2}>
+          Increment Can
         </Button>
-        <Text>Glass: {itemCounts.Glass}</Text>
-        <Button onClick={() => incrementCount("Glass")} size="lg" colorScheme="blue">
-          Add Glass
+        <Button onClick={() => incrementCount("Glass")} size="lg" colorScheme="blue" m={2}>
+          Increment Glass
         </Button>
-        <Text>Carton: {itemCounts.Carton}</Text>
-        <Button onClick={() => incrementCount("Carton")} size="lg" colorScheme="blue">
-          Add Carton
+        <Button onClick={() => incrementCount("Carton")} size="lg" colorScheme="blue" m={2}>
+          Increment Carton
         </Button>
       </Box>
       <Box>
-        <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={isRecording ? stopRecording : startRecording} m={2}>
-          {isRecording ? "Stop" : "Start/Pause"}
+        <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={isRecording ? pauseRecording : startRecording} m={2}>
+          {isRecording ? "Pause" : "Start"}
         </Button>
         <Button onClick={resetCount} colorScheme="yellow" m={2}>
           Reset Running Tallies

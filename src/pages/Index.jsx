@@ -108,9 +108,16 @@ const Index = () => {
     if (recognition) {
       recognition.stop();
       setIsRecording(false);
+      const updatedCumulativeCounts = { ...cumulativeCounts };
+      Object.keys(sessionCounts).forEach((key) => {
+        updatedCumulativeCounts[key] += sessionCounts[key];
+      });
+      setCumulativeCounts(updatedCumulativeCounts);
+      setSessionCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
+      localStorage.setItem("cumulativeTally", JSON.stringify(updatedCumulativeCounts));
       toast({
         title: "Recording Stopped",
-        description: "The session has ended and data has been saved.",
+        description: "The session has ended, data has been saved and session counts reset.",
         status: "success",
         duration: 3000,
         isClosable: true,

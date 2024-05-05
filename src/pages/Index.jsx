@@ -94,7 +94,9 @@ const Index = () => {
   };
 
   const detectKeywords = (transcript) => {
+    console.log("Received transcript:", transcript);
     const keywords = transcript.toLowerCase().match(/\b(pet|hdp|can|glass|carton)\b/g) || [];
+    console.log("Detected keywords:", keywords);
     let updatesFound = false;
     const updatedCounts = { ...itemCounts };
 

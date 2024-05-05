@@ -161,6 +161,23 @@ const Index = () => {
     });
   };
 
+  const handleDownloadCSV = () => {
+    const date = new Date();
+    const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+    let downloadCount = parseInt(localStorage.getItem(formattedDate) || "0", 10) + 1;
+    localStorage.setItem(formattedDate, downloadCount.toString());
+    const filename = `${formattedDate}-CDS_Count-${downloadCount}.csv`;
+    const csvContent = [["Material", "Count"], ...Object.entries(cumulativeCounts).map(([key, value]) => [key, value])].map((e) => e.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
       <Button onClick={startRecording} colorScheme={isRecording ? "orange" : "green"} leftIcon={<FaMicrophone />}>
@@ -172,7 +189,7 @@ const Index = () => {
       <Button onClick={resetCumulativeCounts} colorScheme="orange">
         Reset Cumulative Counts
       </Button>
-      <Button onClick={() => console.log("Download CSV functionality not implemented yet")} colorScheme="blue">
+      <Button onClick={handleDownloadCSV} colorScheme="blue">
         Download CSV
       </Button>
       <VStack divider={<StackDivider borderColor="gray.200" />} spacing={4} align="stretch">

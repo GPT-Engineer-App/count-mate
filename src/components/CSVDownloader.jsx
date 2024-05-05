@@ -7,7 +7,11 @@ const CSVDownloader = ({ data }) => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "data.csv");
+    const date = new Date();
+    const dateString = `${date.getDate()}-${date.getMonth() + 1}`;
+    const downloadCount = parseInt(localStorage.getItem(dateString) || "0", 10) + 1;
+    localStorage.setItem(dateString, downloadCount.toString());
+    link.setAttribute("download", `${dateString}-CDS_Count-${downloadCount}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

@@ -93,7 +93,7 @@ const Index = () => {
   const detectKeywords = (transcript) => {
     console.log("Received transcript for processing:", transcript);
 
-    const matches = transcript.toLowerCase().match(/\b(pet|hd|can|glass|cart)\b/g) || [];
+    const matches = transcript.match(/\b(pet|hdp|can|glass|carton)\b/g) || [];
     console.log("Detected keywords:", matches);
     let updatesFound = false;
     const updatedCounts = { ...itemCounts };
@@ -205,16 +205,36 @@ const Index = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
     if (!SpeechRecognition) {
       console.error("SpeechRecognition is not supported by this browser.");
+      toast({
+        title: "Unsupported Feature",
+        description: "Speech recognition is not supported by your browser.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
       return;
     }
-    if (SpeechRecognition) {
-      const recognitionInstance = new SpeechRecognition();
-      recognitionInstance.continuous = true;
-      recognitionInstance.interimResults = true;
-      recognitionInstance.lang = "en-US";
-      // Removed onresult handling for speech recognition as voice command functionality is removed
-      setRecognition(recognitionInstance);
-    }
+    const recognitionInstance = new SpeechRecognition();
+    recognitionInstance.continuous = true;
+    recognitionInstance.interimResults = true;
+    recognitionInstance.lang = "en-US";
+    recognitionInstance.onresult = (event) => {
+      const lastResult = event.results[event.resultIndex];
+      if (lastResult.isFinal) {
+        detectKeywords(lastResult[0].transcript.trim().toLowerCase());
+      }
+    };
+    recognitionInstance.onerror = (event) => {
+      const errorMessage = `Speech recognition error: ${event.error}`;
+      toast({
+        title: "Recognition Error",
+        description: errorMessage,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    };
+    setRecognition(recognitionInstance);
   }, []);
 
   const resumeRecording = () => {

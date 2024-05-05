@@ -1,8 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 
-function App() {
+const RouterSetup = () => {
   return (
     <Router>
       <Routes>
@@ -11,6 +11,6 @@ function App() {
       </Routes>
     </Router>
   );
-}
+};
 
-export default App;
+export default RouterSetup;

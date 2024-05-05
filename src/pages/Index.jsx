@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { VStack, Button, Text, useToast, StackDivider, Box, Heading } from "@chakra-ui/react";
+import { VStack, Button, useToast, StackDivider, Box, Heading, Text } from "@chakra-ui/react";
 import { FaMicrophone } from "react-icons/fa";
+import useSpeechRecognition from "../hooks/useSpeechRecognition";
+import CountDisplay from "../components/CountDisplay";
 
 const Index = () => {
   const [recognition, setRecognition] = useState(null);

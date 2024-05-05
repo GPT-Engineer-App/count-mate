@@ -95,38 +95,22 @@ const Index = () => {
 
   const detectKeywords = (transcript) => {
     const keywords = transcript.toLowerCase().match(/\b(pet|hdp|can|glass|carton)\b/g) || [];
+    let updatesFound = false;
     const updatedCounts = { ...itemCounts };
 
     keywords.forEach((keyword) => {
-      switch (keyword) {
-        case "pet":
-          updatedCounts.PET++;
-          break;
-        case "hdp":
-          updatedCounts.HDP++;
-          break;
-        case "can":
-          updatedCounts.Can++;
-          break;
-        case "glass":
-          updatedCounts.Glass++;
-          break;
-        case "carton":
-          updatedCounts.Carton++;
-          break;
+      if (["pet", "hdp", "can", "glass", "carton"].includes(keyword)) {
+        updatedCounts[keyword]++;
+        updatesFound = true;
       }
     });
 
-    setItemCounts(updatedCounts);
-    localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
-    localStorage.setItem("tallyLog", JSON.stringify(itemCounts));
-    toast({
-      title: "Tally Updated",
-      description: `Updated counts: ${keywords.join(", ")}`,
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
+    if (updatesFound) {
+      setItemCounts(updatedCounts);
+      localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
+    } else {
+      console.log("No valid keywords detected, tally not updated.");
+    }
   };
 
   const resetCount = () => {

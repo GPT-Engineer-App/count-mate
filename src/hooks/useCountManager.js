@@ -1,22 +1,23 @@
 import { useState } from "react";
-import { loadCounts, saveCounts } from "../utils/storage";
 
 const useCountManager = () => {
-  const [counts, setCounts] = useState(() => loadCounts());
+  const [sessionCounts, setSessionCounts] = useState({ pet: 0, hdp: 0, can: 0, glass: 0, carton: 0 });
+  const [cumulativeCounts, setCumulativeCounts] = useState({ pet: 0, hdp: 0, can: 0, glass: 0, carton: 0 });
 
-  const incrementCount = (keyword) => {
-    const newCounts = { ...counts, [keyword]: (counts[keyword] || 0) + 1 };
-    setCounts(newCounts);
-    saveCounts(newCounts);
+  const resetSessionCounts = () => {
+    setSessionCounts({ pet: 0, hdp: 0, can: 0, glass: 0, carton: 0 });
   };
 
-  const resetCounts = () => {
-    const resettedCounts = { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 };
-    setCounts(resettedCounts);
-    saveCounts(resettedCounts);
+  const addSessionCountsToCumulative = () => {
+    let updatedCumulative = { ...cumulativeCounts };
+    Object.keys(sessionCounts).forEach((key) => {
+      updatedCumulative[key] += sessionCounts[key];
+    });
+    setCumulativeCounts(updatedCumulative);
+    resetSessionCounts();
   };
 
-  return { counts, incrementCount, resetCounts };
+  return { sessionCounts, setSessionCounts, cumulativeCounts, addSessionCountsToCumulative };
 };
 
 export default useCountManager;

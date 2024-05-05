@@ -268,10 +268,12 @@ const Index = () => {
   };
 
   const incrementCount = (type) => {
-    setItemCounts((prevCounts) => ({
-      ...prevCounts,
-      [type]: prevCounts[type] + 1,
-    }));
+    setItemCounts((prevCounts) => {
+      return {
+        ...prevCounts,
+        [type]: prevCounts[type] + 1,
+      };
+    });
   };
 
   return (

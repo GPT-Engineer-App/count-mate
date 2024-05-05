@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Text, VStack, useToast } from "@chakra-ui/react";
-import { FaMicrophone, FaRedo } from "react-icons/fa";
+import { VStack, Button, Text, useToast } from "@chakra-ui/react";
+import { FaMicrophone } from "react-icons/fa";
 
 const Index = () => {
     const [recognition, setRecognition] = useState(null);
-    const [itemCounts, setItemCounts] = useState(() => {
-        const savedCounts = localStorage.getItem("tallyLog");
+    const [sessionCounts, setSessionCounts] = useState({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
+    const [cumulativeCounts, setCumulativeCounts] = useState(() => {
+        const savedCounts = localStorage.getItem("cumulativeTally");
         return savedCounts ? JSON.parse(savedCounts) : { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 };
     });
     const [isRecording, setIsRecording] = useState(false);
@@ -26,30 +27,68 @@ const Index = () => {
 
         const recognitionInstance = new SpeechRecognition();
         recognitionInstance.continuous = true;
-        recognitionInstance.interimResults = true;
+        recognitionInstance.interimResults = false;
         recognitionInstance.lang = "en-US";
-        recognitionInstance.onresult = (event) => {
-            const lastResult = event.results[event.resultIndex];
-            if (lastResult.isFinal) {
-                detectKeywords(lastResult[0].transcript.trim().toLowerCase());
-            }
-        };
-        recognitionInstance.onerror = (event) => {
-            toast({
-                title: "Recognition Error",
-                description: `Error occurred: ${event.error}`,
-                status: "error",
-                duration: 3000,
-                isClosable: true,
-            });
-        };
+        recognitionInstance.onresult = handleResult;
+        recognitionInstance.onerror = handleError;
         setRecognition(recognitionInstance);
+
+        return () => recognitionInstance.stop(); // Cleanup on unmount
     }, [toast]);
 
+    const handleResult = (event) => {
+        const lastResult = event.results[event.resultIndex];
+        if (lastResult.isFinal) {
+            const transcript = lastResult[0].transcript.trim().toLowerCase();
+            detectKeywords(transcript);
+        }
+    };
+
+    const handleError = (event) => {
+        toast({
+            title: "Recognition Error",
+            description: `Error occurred: ${event.error}`,
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+        });
+    };
+
+    const detectKeywords = (transcript) => {
+        const keywordRegex = /\b(pet|hdp|can|glass|carton)\b/g;
+        const matches = transcript.match(keywordRegex);
+        if (matches && matches.length) {
+            const updatedSessionCounts = { ...sessionCounts };
+            const updatedCumulativeCounts = { ...cumulativeCounts };
+            matches.forEach(keyword => {
+                updatedSessionCounts[keyword]++;
+                updatedCumulativeCounts[keyword]++;
+            });
+            setSessionCounts(updatedSessionCounts);
+            setCumulativeCounts(updatedCumulativeCounts);
+            localStorage.setItem("cumulativeTally", JSON.stringify(updatedCumulativeCounts));
+            toast({
+                title: "Keyword Detected",
+                description: `Updated counts for ${matches.join(", ")}.`,
+                status: "success",
+                duration: 2000,
+                isClosable: true,
+            });
+        } else {
+            toast({
+                title: "No Keywords Detected",
+                description: "No valid keywords detected in the last speech segment.",
+                status: "warning",
+                duration: 2000,
+                isClosable: true,
+            });
+        }
+    };
+
     const startRecording = () => {
-        if (recognition) {
-            setIsRecording(true);
+        if (recognition && !isRecording) {
             recognition.start();
+            setIsRecording(true);
             toast({
                 title: "Recording Started",
                 description: "You may start speaking your counts now.",
@@ -62,11 +101,11 @@ const Index = () => {
 
     const stopRecording = () => {
         if (recognition) {
-            setIsRecording(false);
             recognition.stop();
+            setIsRecording(false);
             toast({
                 title: "Recording Stopped",
-                description: "The session has ended.",
+                description: "The session has ended and data has been saved.",
                 status: "success",
                 duration: 3000,
                 isClosable: true,
@@ -74,27 +113,8 @@ const Index = () => {
         }
     };
 
-    const detectKeywords = (transcript) => {
-        const keywords = /\b(pet|hdp|can|glass|carton)\b/g;
-        const matches = transcript.match(keywords) || [];
-        const updatedCounts = { ...itemCounts };
-        matches.forEach(keyword => {
-            updatedCounts[keyword] = (updatedCounts[keyword] || 0) + 1;
-        });
-        setItemCounts(updatedCounts);
-        localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
-        toast({
-            title: "Keyword Detected",
-            description: `Counted additional ${matches.join(", ")}.`,
-            status: "success",
-            duration: 2000,
-            isClosable: true,
-        });
-    };
-
     const resetCounts = () => {
-        setItemCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
-        localStorage.setItem("tallyLog", JSON.stringify({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 }));
+        setSessionCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
         toast({
             title: "Counts Reset",
             description: "All running tallies have been reset.",
@@ -106,15 +126,17 @@ const Index = () => {
 
     return (
         <VStack spacing={4} align="center" justify="center" height="100vh">
-            <Button onClick={startRecording} colorScheme="blue" leftIcon={<FaMicrophone />}>
-                Start Recording
-            </Button>
-            <Button onClick={stopRecording} colorScheme="red" leftIcon={<FaRedo />}>
-                Stop Recording
+            <Button onClick={startRecording} colorScheme={isRecording ? "red" : "green"} leftIcon={<FaMicrophone />}>
+                {isRecording ? "Stop Recording" : "Start Recording"}
             </Button>
             <Button onClick={resetCounts} colorScheme="yellow">
                 Reset Counts
             </Button>
+            <Button onClick={() => updateCSVFile(cumulativeCounts)} colorScheme="blue">
+                Download CSV
+            </Button>
+            <Text>Session Counts: {JSON.stringify(sessionCounts)}</Text>
+            <Text>Cumulative Counts: {JSON.stringify(cumulativeCounts)}</Text>
         </VStack>
     );
 };

@@ -47,22 +47,18 @@ const Index = () => {
   };
 
   const handleError = (event) => {
-    try {
-      console.error("Speech Recognition Error:", event.error);
-      toast({
-        title: "Recognition Error",
-        description: `An error occurred during speech recognition: ${event.error}`,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    } catch (error) {
-      console.error("Error handling speech recognition error:", error);
-    }
+    console.error("Speech Recognition Error:", event.error);
+    toast({
+      title: "Recognition Error",
+      description: `An error occurred during speech recognition: ${event.error}`,
+      status: "error",
+      duration: 5000,
+      isClosable: true,
+    });
   };
 
   const detectKeywords = (transcript) => {
-    const keywordRegex = /\b(PET|HDP|CAN|GLASS|CARTON)\b/gi;
+    const keywordRegex = /\b(pet|hdp|can|glass|carton)\b/gi;
     const matches = transcript.match(keywordRegex);
     if (matches && matches.length) {
       const updatedSessionCounts = { ...sessionCounts };
@@ -98,50 +94,42 @@ const Index = () => {
   };
 
   const startRecording = () => {
-    console.log("Attempting to start/pause recording. Current state:", { recognition, isRecording });
-    if (recognition) {
-      if (!isRecording) {
-        recognition.start();
-        setIsRecording(true);
-        console.log("Recording started.");
-        toast({
-          title: "Recording Started",
-          description: "You may start speaking your counts now.",
-          status: "info",
-          duration: 3000,
-          isClosable: true,
-        });
-      } else {
-        recognition.stop();
-        setIsRecording(false);
-        console.log("Recording paused.");
-        toast({
-          title: "Recording Paused",
-          description: "Speech recognition paused.",
-          status: "info",
-          duration: 3000,
-          isClosable: true,
-        });
+    setIsRecording((prevIsRecording) => {
+      if (recognition) {
+        if (!prevIsRecording) {
+          recognition.start();
+          console.log("Recording started.");
+          toast({
+            title: "Recording Started",
+            description: "You may start speaking your counts now.",
+            status: "info",
+            duration: 3000,
+            isClosable: true,
+          });
+        } else {
+          recognition.stop();
+          console.log("Recording paused.");
+          toast({
+            title: "Recording Paused",
+            description: "Speech recognition paused.",
+            status: "info",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
       }
-    }
+      return !prevIsRecording;
+    });
   };
 
   const stopRecording = () => {
-    console.log("Attempting to stop recording. Current state:", { recognition, isRecording });
     if (recognition && isRecording) {
       recognition.stop();
       setIsRecording(false);
-      console.log("Recording stopped. Updating cumulative counts.");
-      const updatedCumulativeCounts = { ...cumulativeCounts };
-      Object.keys(sessionCounts).forEach((key) => {
-        updatedCumulativeCounts[key] += sessionCounts[key];
-      });
-      setCumulativeCounts(updatedCumulativeCounts);
-      localStorage.setItem("cumulativeTally", JSON.stringify(updatedCumulativeCounts));
-      console.log("Cumulative counts updated:", updatedCumulativeCounts);
+      console.log("Recording stopped.");
       toast({
         title: "Recording Stopped",
-        description: "The session has ended and cumulative data has been updated.",
+        description: "The session has ended.",
         status: "success",
         duration: 3000,
         isClosable: true,

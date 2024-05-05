@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { VStack, Button, Text, useToast } from "@chakra-ui/react";
+import { VStack, Button, Text, useToast, StackDivider, Box, Heading } from "@chakra-ui/react";
 import { FaMicrophone } from "react-icons/fa";
 
 const Index = () => {
@@ -55,7 +55,7 @@ const Index = () => {
   };
 
   const detectKeywords = (transcript) => {
-    const keywordRegex = /\b(pet|hdp|can|glass|carton)\b/g;
+    const keywordRegex = /\b(pet|hdp|can|glass|carton)\b/gi;
     const matches = transcript.match(keywordRegex);
     if (matches && matches.length) {
       const updatedSessionCounts = { ...sessionCounts };
@@ -105,7 +105,7 @@ const Index = () => {
   };
 
   const stopRecording = () => {
-    if (recognition) {
+    if (recognition && isRecording) {
       recognition.stop();
       setIsRecording(false);
       const updatedCumulativeCounts = { ...cumulativeCounts };
@@ -161,8 +161,20 @@ const Index = () => {
       <Button onClick={() => console.log("Download CSV functionality not implemented yet")} colorScheme="blue">
         Download CSV
       </Button>
-      <Text>Session Counts: {JSON.stringify(sessionCounts)}</Text>
-      <Text>Cumulative Counts: {JSON.stringify(cumulativeCounts)}</Text>
+      <VStack divider={<StackDivider borderColor="gray.200" />} spacing={4} align="stretch">
+        <Box p={5} shadow="md" borderWidth="1px">
+          <Heading fontSize="xl">Session Counts</Heading>
+          {Object.keys(sessionCounts).map((key) => (
+            <Text key={key}>{`${key}: ${sessionCounts[key]}`}</Text>
+          ))}
+        </Box>
+        <Box p={5} shadow="md" borderWidth="1px">
+          <Heading fontSize="xl">Cumulative Counts</Heading>
+          {Object.keys(cumulativeCounts).map((key) => (
+            <Text key={key}>{`${key}: ${cumulativeCounts[key]}`}</Text>
+          ))}
+        </Box>
+      </VStack>
     </VStack>
   );
 };

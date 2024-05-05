@@ -25,12 +25,7 @@ const Index = () => {
       recognitionInstance.continuous = true;
       recognitionInstance.interimResults = true;
       recognitionInstance.lang = "en-US";
-      recognitionInstance.onresult = (event) => {
-        const lastResult = event.results[event.resultIndex];
-        if (lastResult.isFinal) {
-          handleVoiceCommand(lastResult[0].transcript.trim().toLowerCase());
-        }
-      };
+      // Removed onresult handling for speech recognition as voice command functionality is removed
       recognitionInstance.onerror = (event) => {
         console.error("Speech recognition error:", event.error);
         toast({
@@ -199,29 +194,7 @@ const Index = () => {
     }
   };
 
-  const handleVoiceCommand = (transcript) => {
-    const trimmedCommand = transcript.trim().toLowerCase();
-    const controlCommands = ["start", "stop", "pause", "resume"];
-
-    if (controlCommands.includes(trimmedCommand)) {
-      switch (trimmedCommand) {
-        case "start":
-          startRecording();
-          break;
-        case "stop":
-          stopRecording();
-          break;
-        case "pause":
-          pauseRecording();
-          break;
-        case "resume":
-          resumeRecording();
-          break;
-      }
-    } else {
-      detectKeywords(trimmedCommand);
-    }
-  };
+  // Removed handleVoiceCommand function as per update request
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
@@ -234,12 +207,7 @@ const Index = () => {
       recognitionInstance.continuous = true;
       recognitionInstance.interimResults = true;
       recognitionInstance.lang = "en-US";
-      recognitionInstance.onresult = (event) => {
-        const lastResult = event.results[event.resultIndex];
-        if (lastResult.isFinal) {
-          handleVoiceCommand(lastResult[0].transcript.trim().toLowerCase());
-        }
-      };
+      // Removed onresult handling for speech recognition as voice command functionality is removed
       setRecognition(recognitionInstance);
     }
   }, []);

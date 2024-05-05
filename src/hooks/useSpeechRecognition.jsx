@@ -20,9 +20,7 @@ const useSpeechRecognition = () => {
   };
 
   const resetSessionCounts = () => {
-    console.log("Resetting session counts. Current session counts:", sessionCounts);
-    setSessionCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
-    console.log("Session counts after reset:", sessionCounts);
+    setSessionCounts((prevCounts) => ({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 }));
   };
 
   const resetCumulativeCounts = () => {

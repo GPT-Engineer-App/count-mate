@@ -47,18 +47,22 @@ const Index = () => {
   };
 
   const handleError = (event) => {
-    console.error("Speech Recognition Error:", event.error);
-    toast({
-      title: "Recognition Error",
-      description: `An error occurred during speech recognition: ${event.error}`,
-      status: "error",
-      duration: 5000,
-      isClosable: true,
-    });
+    try {
+      console.error("Speech Recognition Error:", event.error);
+      toast({
+        title: "Recognition Error",
+        description: `An error occurred during speech recognition: ${event.error}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error handling speech recognition error:", error);
+    }
   };
 
   const detectKeywords = (transcript) => {
-    const keywordRegex = /\b(pet|hdp|can|glass|carton)\b/gi;
+    const keywordRegex = /\b(PET|HDP|CAN|GLASS|CARTON)\b/gi;
     const matches = transcript.match(keywordRegex);
     if (matches && matches.length) {
       const updatedSessionCounts = { ...sessionCounts };

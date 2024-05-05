@@ -1,4 +1,4 @@
-import { Box, Button, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Text, VStack, Input } from "@chakra-ui/react";
 
 const Login = () => {
   return (
@@ -7,6 +7,8 @@ const Login = () => {
         Login Page
       </Text>
       <Box>
+        <Input placeholder="Username" mb={2} />
+        <Input placeholder="Password" mb={2} type="password" />
         <Button colorScheme="blue">Log In</Button>
       </Box>
     </VStack>

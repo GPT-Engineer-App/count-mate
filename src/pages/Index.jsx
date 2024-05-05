@@ -257,7 +257,7 @@ const Index = () => {
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <Button onClick={installPWA} colorScheme="teal" size="lg" m={4} isDisabled={!window.deferredPrompt}>
+      <Button onClick={installPWA} colorScheme="teal" size="lg" m={4} isDisabled={!window.deferredPrompt} aria-label="Install app">
         Install PWA
       </Button>
       <Text fontSize="2xl" fontWeight="bold">

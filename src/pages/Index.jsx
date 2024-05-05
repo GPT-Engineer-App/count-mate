@@ -95,16 +95,17 @@ const Index = () => {
 
   const detectKeywords = (transcript) => {
     console.log("Received transcript for processing:", transcript);
-    const words = transcript.toLowerCase().split(/\s+/);
-    const keywords = ["pet", "hdp", "can", "glass", "carton"];
+
+    const matches = transcript.toLowerCase().match(/\b(pet|hdp|can|glass|carton)\b/g) || [];
+    console.log("Detected keywords:", matches);
     let updatesFound = false;
     const updatedCounts = { ...itemCounts };
 
-    words.forEach((word) => {
-      if (keywords.includes(word)) {
-        updatedCounts[word]++;
+    matches.forEach((keyword) => {
+      if (["pet", "hdp", "can", "glass", "carton"].includes(keyword)) {
+        updatedCounts[keyword]++;
         updatesFound = true;
-        console.log(`Detected and updated count for ${word}`);
+        console.log(`Detected and updated count for ${keyword}`);
       }
     });
 

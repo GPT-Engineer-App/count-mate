@@ -11,7 +11,7 @@ const colors = {
   },
 };
 
-const theme = extendTheme({ colors });
+const theme = extendTheme({ colors, components: { Button: { baseStyle: { fontWeight: "bold" } } } });
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {

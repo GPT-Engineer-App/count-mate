@@ -1,4 +1,4 @@
-import { Box, Button, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Text, VStack, useToast } from "@chakra-ui/react";
 
 const Login = () => {
   return (
@@ -7,7 +7,9 @@ const Login = () => {
         Login Page
       </Text>
       <Box>
-        <Button colorScheme="blue">Log In</Button>
+        <Button colorScheme="blue" onClick={() => console.log("Login functionality not implemented yet")}>
+          Log In
+        </Button>
       </Box>
     </VStack>
   );

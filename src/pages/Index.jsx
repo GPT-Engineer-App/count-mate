@@ -59,11 +59,16 @@ const Index = () => {
     const matches = transcript.match(keywordRegex);
     if (matches && matches.length) {
       const updatedSessionCounts = { ...sessionCounts };
-      const updatedCumulativeCounts = { ...cumulativeCounts };
       matches.forEach((keyword) => {
         updatedSessionCounts[keyword]++;
+      });
+      setSessionCounts(updatedSessionCounts);
+
+      const updatedCumulativeCounts = { ...cumulativeCounts };
+      matches.forEach((keyword) => {
         updatedCumulativeCounts[keyword]++;
       });
+      setCumulativeCounts(updatedCumulativeCounts);
       setSessionCounts(updatedSessionCounts);
       setCumulativeCounts(updatedCumulativeCounts);
       localStorage.setItem("cumulativeTally", JSON.stringify(updatedCumulativeCounts));

@@ -21,13 +21,13 @@ describe("Voice Component Tests", () => {
 
   test('handleVoiceCommand triggers startRecording on "start"', () => {
     const { getByText } = render(<Index />);
-    fireEvent.click(getByText("Start"));
+    fireEvent.click(getByText("Start Recording"));
     expect(startRecording).toHaveBeenCalled();
   });
 
   test('handleVoiceCommand triggers stopRecording on "stop"', () => {
     const { getByText } = render(<Index />);
-    fireEvent.click(getByText("Stop"));
+    fireEvent.click(getByText("Stop Recording"));
     expect(stopRecording).toHaveBeenCalled();
   });
 

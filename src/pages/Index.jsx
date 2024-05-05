@@ -3,12 +3,9 @@ import { FaMicrophone, FaRedo } from "react-icons/fa";
 import { useState, useEffect } from "react";
 
 const Index = () => {
-  const [itemCounts, setItemCounts] = useState({
-    PET: 0,
-    HDP: 0,
-    Can: 0,
-    Glass: 0,
-    Carton: 0,
+  const [itemCounts, setItemCounts] = useState(() => {
+    const savedCounts = localStorage.getItem("tallyLog");
+    return savedCounts ? JSON.parse(savedCounts) : { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 };
   });
   const [isRecording, setIsRecording] = useState(false);
   const [cumulativeTally, setCumulativeTally] = useState({
@@ -118,7 +115,7 @@ const Index = () => {
 
     if (updatesFound) {
       console.log("Updates found, setting item counts and updating local storage.");
-      setItemCounts(updatedCounts);
+      setItemCounts((prevCounts) => ({ ...prevCounts, ...updatedCounts }));
       localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
     } else {
       console.error("No valid keywords detected, tally not updated.");
@@ -254,6 +251,11 @@ const Index = () => {
       });
     }
   };
+
+  useEffect(() => {
+    console.log("Updated item counts:", itemCounts);
+    localStorage.setItem("tallyLog", JSON.stringify(itemCounts));
+  }, [itemCounts]);
 
   const exportData = () => {
     try {

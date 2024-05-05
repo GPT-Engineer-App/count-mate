@@ -115,7 +115,13 @@ const Index = () => {
 
     if (updatesFound) {
       console.log("Updates found, setting item counts and updating local storage.");
-      setItemCounts((prevCounts) => ({ ...prevCounts, ...updatedCounts }));
+      setItemCounts((prevCounts) => {
+        const newCounts = { ...prevCounts };
+        Object.keys(updatedCounts).forEach((key) => {
+          newCounts[key] = (prevCounts[key] || 0) + updatedCounts[key];
+        });
+        return newCounts;
+      });
       localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
     } else {
       console.error("No valid keywords detected, tally not updated.");

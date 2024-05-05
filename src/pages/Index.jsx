@@ -91,16 +91,28 @@ const Index = () => {
   };
 
   const startRecording = () => {
-    if (recognition && !isRecording) {
-      recognition.start();
-      setIsRecording(true);
-      toast({
-        title: "Recording Started",
-        description: "You may start speaking your counts now.",
-        status: "info",
-        duration: 3000,
-        isClosable: true,
-      });
+    if (recognition) {
+      if (!isRecording) {
+        recognition.start();
+        setIsRecording(true);
+        toast({
+          title: "Recording Started",
+          description: "You may start speaking your counts now.",
+          status: "info",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        recognition.stop();
+        setIsRecording(false);
+        toast({
+          title: "Recording Paused",
+          description: "Speech recognition paused.",
+          status: "info",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     }
   };
 
@@ -113,11 +125,10 @@ const Index = () => {
         updatedCumulativeCounts[key] += sessionCounts[key];
       });
       setCumulativeCounts(updatedCumulativeCounts);
-      setSessionCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
       localStorage.setItem("cumulativeTally", JSON.stringify(updatedCumulativeCounts));
       toast({
         title: "Recording Stopped",
-        description: "The session has ended, data has been saved and session counts reset.",
+        description: "The session has ended and cumulative data has been updated.",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -149,8 +160,8 @@ const Index = () => {
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <Button onClick={startRecording} colorScheme={isRecording ? "red" : "green"} leftIcon={<FaMicrophone />}>
-        {isRecording ? "Stop Recording" : "Start Recording"}
+      <Button onClick={startRecording} colorScheme={isRecording ? "orange" : "green"} leftIcon={<FaMicrophone />}>
+        {isRecording ? "Pause Recording" : "Start Recording"}
       </Button>
       <Button onClick={resetSessionCounts} colorScheme="yellow">
         Reset Session Counts

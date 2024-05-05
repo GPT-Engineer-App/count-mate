@@ -47,11 +47,12 @@ const Index = () => {
   };
 
   const handleError = (event) => {
+    console.error("Speech Recognition Error:", event.error);
     toast({
       title: "Recognition Error",
-      description: `Error occurred: ${event.error}`,
+      description: `An error occurred during speech recognition: ${event.error}`,
       status: "error",
-      duration: 3000,
+      duration: 5000,
       isClosable: true,
     });
   };

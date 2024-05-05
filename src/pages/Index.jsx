@@ -328,22 +328,14 @@ const Index = () => {
         <Button onClick={stopRecording} colorScheme="red" m={2}>
           Stop
         </Button>
-        <Button onClick={resetCount} colorScheme="yellow" m={2}>
-          Reset Running Tallies
+        <Button onClick={startRecording} colorScheme="green" m={2}>
+          Start
         </Button>
-        <VStack>
-          <Text>Cumulative Tally:</Text>
-          <Text>PET: {cumulativeTally.PET}</Text>
-          <Text>HDP: {cumulativeTally.HDP}</Text>
-          <Text>Can: {cumulativeTally.Can}</Text>
-          <Text>Glass: {cumulativeTally.Glass}</Text>
-          <Text>Carton: {cumulativeTally.Carton}</Text>
-        </VStack>
-        <Button onClick={() => exportData("cumulative")} colorScheme="green" m={2}>
-          Export Cumulative Data
+        <Button onClick={stopRecording} colorScheme="red" m={2}>
+          Stop
         </Button>
-        <Button onClick={resetCumulativeTally} colorScheme="red" m={2}>
-          Reset Cumulative
+        <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={isRecording ? pauseRecording : resumeRecording} m={2}>
+          {isRecording ? "Pause" : "Resume"}
         </Button>
       </Box>
     </VStack>

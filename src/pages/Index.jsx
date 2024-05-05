@@ -93,7 +93,7 @@ const Index = () => {
   const detectKeywords = (transcript) => {
     console.log("Received transcript for processing:", transcript);
 
-    const matches = transcript.toLowerCase().match(/\b(pet|hdp|can|glass|carton)\b/g) || [];
+    const matches = transcript.toLowerCase().match(/\b(pet|hd|can|glass|cart)\b/g) || [];
     console.log("Detected keywords:", matches);
     let updatesFound = false;
     const updatedCounts = { ...itemCounts };
@@ -291,15 +291,8 @@ const Index = () => {
         </Button>
       </Box>
       <Box>
-        <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={isRecording ? pauseRecording : resumeRecording} m={2}>
-          {isRecording ? "Pause" : "Resume"}
-        </Button>
-
-        <Button onClick={startRecording} colorScheme="green" m={2}>
-          Start
-        </Button>
-        <Button onClick={stopRecording} colorScheme="red" m={2}>
-          Stop
+        <Button leftIcon={<FaMicrophone />} colorScheme={isRecording ? "red" : "blue"} onClick={isRecording ? stopRecording : startRecording} m={2}>
+          {isRecording ? "Stop" : "Start/Pause"}
         </Button>
         <Button onClick={resetCount} colorScheme="yellow" m={2}>
           Reset Running Tallies

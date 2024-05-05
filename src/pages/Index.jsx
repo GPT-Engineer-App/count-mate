@@ -93,10 +93,12 @@ const Index = () => {
   };
 
   const startRecording = () => {
+    console.log("Attempting to start/pause recording. Current state:", { recognition, isRecording });
     if (recognition) {
       if (!isRecording) {
         recognition.start();
         setIsRecording(true);
+        console.log("Recording started.");
         toast({
           title: "Recording Started",
           description: "You may start speaking your counts now.",
@@ -107,6 +109,7 @@ const Index = () => {
       } else {
         recognition.stop();
         setIsRecording(false);
+        console.log("Recording paused.");
         toast({
           title: "Recording Paused",
           description: "Speech recognition paused.",
@@ -119,15 +122,18 @@ const Index = () => {
   };
 
   const stopRecording = () => {
+    console.log("Attempting to stop recording. Current state:", { recognition, isRecording });
     if (recognition && isRecording) {
       recognition.stop();
       setIsRecording(false);
+      console.log("Recording stopped. Updating cumulative counts.");
       const updatedCumulativeCounts = { ...cumulativeCounts };
       Object.keys(sessionCounts).forEach((key) => {
         updatedCumulativeCounts[key] += sessionCounts[key];
       });
       setCumulativeCounts(updatedCumulativeCounts);
       localStorage.setItem("cumulativeTally", JSON.stringify(updatedCumulativeCounts));
+      console.log("Cumulative counts updated:", updatedCumulativeCounts);
       toast({
         title: "Recording Stopped",
         description: "The session has ended and cumulative data has been updated.",

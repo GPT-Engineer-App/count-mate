@@ -25,12 +25,17 @@ const Index = () => {
       recognitionInstance.continuous = true;
       recognitionInstance.interimResults = true;
       recognitionInstance.lang = "en-US";
-      // Removed onresult handling for speech recognition as voice command functionality is removed
+      recognitionInstance.onresult = (event) => {
+        const lastResult = event.results[event.resultIndex];
+        if (lastResult.isFinal) {
+          detectKeywords(lastResult[0].transcript.trim().toLowerCase());
+        }
+      };
       recognitionInstance.onerror = (event) => {
-        console.error("Speech recognition error:", event.error);
+        const errorMessage = `Speech recognition error: ${event.error}`;
         toast({
           title: "Recognition Error",
-          description: `Error occurred: ${event.error}`,
+          description: errorMessage,
           status: "error",
           duration: 3000,
           isClosable: true,

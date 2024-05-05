@@ -106,6 +106,13 @@ const Index = () => {
         updatedCounts[keyword]++;
         updatesFound = true;
         console.log(`Detected and updated count for ${keyword}`);
+        toast({
+          title: "Keyword Detected",
+          description: `Counted additional ${keyword.toUpperCase()}.`,
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
       }
     });
 
@@ -115,6 +122,13 @@ const Index = () => {
       localStorage.setItem("tallyLog", JSON.stringify(updatedCounts));
     } else {
       console.error("No valid keywords detected, tally not updated.");
+      toast({
+        title: "No Keywords Detected",
+        description: "Please try speaking clearly.",
+        status: "warning",
+        duration: 2000,
+        isClosable: true,
+      });
     }
   };
 

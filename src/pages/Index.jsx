@@ -47,7 +47,14 @@ const Index = () => {
     const lastResult = event.results[event.resultIndex];
     if (lastResult.isFinal) {
       const transcript = lastResult[0].transcript.trim().toLowerCase();
-      detectKeywordsCustom(transcript);
+      const detectedCounts = detectKeywordsCustom(transcript);
+      setSessionCounts((prevCounts) => {
+        const updatedCounts = { ...prevCounts };
+        Object.keys(detectedCounts).forEach((key) => {
+          updatedCounts[key] = (updatedCounts[key] || 0) + detectedCounts[key];
+        });
+        return updatedCounts;
+      });
     }
   };
 
@@ -64,12 +71,10 @@ const Index = () => {
 
   function detectKeywordsCustom(text) {
     const keywords = ["pet", "hdp", "can", "glass", "carton"];
-    text = text.toLowerCase();
-    console.log("Detected words:", text);
-    const words = text.split(/\s+/);
+    const words = text.toLowerCase().split(/\s+/);
     return words.reduce((acc, word) => {
       if (keywords.includes(word)) {
-        acc[word] = true;
+        acc[word] = (acc[word] || 0) + 1;
       }
       return acc;
     }, {});

@@ -54,6 +54,7 @@ const Index = () => {
     const lastResult = event.results[event.resultIndex];
     if (lastResult.isFinal) {
       const transcript = lastResult[0].transcript.trim().toLowerCase();
+      console.log("Final transcript:", transcript);
       const detectedCounts = detectKeywordsCustom(transcript);
       setCounts((prevCounts) => {
         const updatedCounts = { ...prevCounts };

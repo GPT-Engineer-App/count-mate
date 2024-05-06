@@ -23,6 +23,7 @@ const useSpeechRecognition = () => {
   const startRecording = () => {
     if (recognition) {
       recognition.start();
+      setIsRecording(true);
       console.log("Recording started.");
     }
   };
@@ -77,6 +78,7 @@ const useSpeechRecognition = () => {
         .map((result) => result.transcript)
         .join("");
       setTranscript(transcript);
+      console.log("Transcript received:", transcript);
       console.log("Transcript:", transcript);
     };
     recognition.onerror = function (event) {

@@ -6,7 +6,7 @@ const Login = () => {
       <Text fontSize="2xl" fontWeight="bold">
         Login Page
       </Text>
-      <Box>
+      <Box id="login-form">
         <Button colorScheme="blue" onClick={() => console.log("Login functionality not implemented yet")}>
           Log In
         </Button>

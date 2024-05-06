@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Text, Grid } from "@chakra-ui/react";
 
-const CountDisplay = ({ sessionCounts = {}, cumulativeCounts = {} }) => {
+const CountDisplay = ({ counts = { session: {}, cumulative: {} } }) => {
   return (
     <>
       <Box p={5} shadow="md" borderWidth="1px">
@@ -9,10 +9,10 @@ const CountDisplay = ({ sessionCounts = {}, cumulativeCounts = {} }) => {
           Session Counts
         </Text>
         <Grid templateColumns="repeat(2, 1fr)" gap={2}>
-          {Object.keys(sessionCounts).map((key) => (
+          {Object.keys(counts.session).map((key) => (
             <React.Fragment key={key}>
               <Text fontWeight="bold">{key.toUpperCase()}:</Text>
-              <Text>{sessionCounts[key]}</Text>
+              <Text>{counts.session[key]}</Text>
             </React.Fragment>
           ))}
         </Grid>
@@ -22,10 +22,10 @@ const CountDisplay = ({ sessionCounts = {}, cumulativeCounts = {} }) => {
           Cumulative Counts
         </Text>
         <Grid templateColumns="repeat(2, 1fr)" gap={2}>
-          {Object.keys(cumulativeCounts).map((key) => (
+          {Object.keys(counts.cumulative).map((key) => (
             <React.Fragment key={key}>
               <Text fontWeight="bold">{key.toUpperCase()}:</Text>
-              <Text color="blue.500">{cumulativeCounts[key]}</Text>
+              <Text color="blue.500">{counts.cumulative[key]}</Text>
             </React.Fragment>
           ))}
         </Grid>

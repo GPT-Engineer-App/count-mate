@@ -8,9 +8,9 @@ const Index = () => {
   console.log("Index component rendering");
   const recognition = useMemo(() => new (window.SpeechRecognition || window.webkitSpeechRecognition)(), []);
   console.log("Recognition State:", recognition);
-  const [counts, setCounts] = useState(() => {
-    const savedCounts = localStorage.getItem("cumulativeTally");
-    return savedCounts ? JSON.parse(savedCounts) : { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 };
+  const [counts, setCounts] = useState({
+    session: { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 },
+    cumulative: JSON.parse(localStorage.getItem("cumulativeTally") || "{}"),
   });
   console.log("Counts State:", counts);
 
@@ -197,21 +197,17 @@ const Index = () => {
     });
   };
 
-  
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
       <CountDisplay counts={counts} />
       <Button onClick={startRecording} colorScheme={isRecording ? "orange" : "green"} leftIcon={<FaMicrophone />}>
         {isRecording ? "Pause Recording" : "Start Recording"}
       </Button>
-      <Button onClick={resetCounts} colorScheme="yellow">
-        Reset Counts
+      <Button onClick={() => setCounts({ session: { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 }, cumulative: counts.cumulative })} colorScheme="yellow">
+        Reset Session Counts
       </Button>
       <Button onClick={handleDownloadCSV} colorScheme="blue">
         Download CSV
-      </Button>
-      <Button onClick={installPWA} colorScheme="purple">
-        Install App
       </Button>
     </VStack>
   );

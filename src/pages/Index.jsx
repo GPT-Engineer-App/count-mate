@@ -223,7 +223,6 @@ const Index = () => {
         Pause Recording
       </Button>
       <CountDisplay counts={cumulativeCounts} title="Cumulative Counts" />
-      <CountDisplay counts={sessionCounts} />
       <Button colorScheme="blue" onClick={handleDownloadCSV} isDisabled={Object.values(cumulativeCounts).every((count) => count === 0)}>
         Download CSV
       </Button>

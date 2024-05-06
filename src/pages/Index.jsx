@@ -214,21 +214,7 @@ const Index = () => {
     <VStack spacing={4} align="center" justify="center" height="100vh">
       <MicrophoneButton isRecording={isRecording} startRecording={startRecording} pauseRecording={pauseRecording} abortRecording={abortRecording} />
       <CountDisplay counts={counts} />
-      <Button onClick={() => resetCounts("cumulative")} colorScheme="yellow">
-        Cumulative Reset
-      </Button>
-      <Button onClick={() => resetCounts("session")} colorScheme="yellow">
-        Session Reset
-      </Button>
-      <Button onClick={pushCount} colorScheme="blue">
-        Push Count
-      </Button>
-      <Button onClick={handleDownloadCSV} colorScheme="blue">
-        Download CSV
-      </Button>
-      <Button onClick={installPWA} colorScheme="purple">
-        Install App
-      </Button>
+      {}
     </VStack>
   );
 };

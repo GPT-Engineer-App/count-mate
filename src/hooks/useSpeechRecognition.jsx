@@ -97,6 +97,13 @@ const useSpeechRecognition = () => {
         });
         return updatedCounts;
       });
+      toast({
+        title: "Keywords Detected",
+        description: `Detected keywords and updated counts: ${JSON.stringify(detectedCounts)}`,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
     };
     recognition.onerror = function (event) {
       console.error("Recognition error:", event.error);

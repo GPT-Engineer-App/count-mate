@@ -8,27 +8,17 @@ const Index = () => {
   console.log("Index component rendering");
   const recognition = useMemo(() => new (window.SpeechRecognition || window.webkitSpeechRecognition)(), []);
   console.log("Recognition State:", recognition);
-  const [sessionCounts, setSessionCounts] = useState({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
-  console.log("Session Counts State:", sessionCounts);
-  const [cumulativeCounts, setCumulativeCounts] = useState(() => {
+  const [counts, setCounts] = useState(() => {
     const savedCounts = localStorage.getItem("cumulativeTally");
-    if (savedCounts) {
-      try {
-        return JSON.parse(savedCounts);
-      } catch (e) {
-        console.error("Error parsing cumulativeTally from localStorage:", e);
-        return { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 };
-      }
-    } else {
-      return { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 };
-    }
+    return savedCounts ? JSON.parse(savedCounts) : { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 };
   });
+  console.log("Counts State:", counts);
 
   useEffect(() => {
     try {
-      localStorage.setItem("cumulativeTally", JSON.stringify(cumulativeCounts));
+      localStorage.setItem("cumulativeTally", JSON.stringify(counts));
     } catch (e) {
-      console.error("Error saving cumulativeTally to localStorage:", e);
+      console.error("Error saving counts to localStorage:", e);
       toast({
         title: "Storage Error",
         description: "Failed to save data to local storage.",
@@ -37,8 +27,8 @@ const Index = () => {
         isClosable: true,
       });
     }
-  }, [cumulativeCounts]);
-  console.log("Cumulative Counts State:", cumulativeCounts);
+  }, [counts]);
+  console.log("Counts State:", counts);
   const [isRecording, setIsRecording] = useReducer((state) => !state, false);
   console.log("Is Recording State:", isRecording);
   const toast = useToast();
@@ -92,7 +82,7 @@ const Index = () => {
     if (lastResult.isFinal) {
       const transcript = lastResult[0].transcript.trim().toLowerCase();
       const detectedCounts = detectKeywordsCustom(transcript);
-      setSessionCounts((prevCounts) => {
+      setCounts((prevCounts) => {
         const updatedCounts = { ...prevCounts };
         Object.keys(detectedCounts).forEach((key) => {
           updatedCounts[key] = (updatedCounts[key] || 0) + detectedCounts[key];
@@ -165,24 +155,12 @@ const Index = () => {
         duration: 3000,
         isClosable: true,
       });
-
-      setCumulativeCounts((prevCumulative) => ({
-        ...prevCumulative,
-        ...sessionCounts,
-      }));
-
-      setSessionCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
     }
   };
 
-  const resetSessionCounts = () => {
-    console.log("Resetting session counts.");
-    setSessionCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
-  };
-
-  const resetCumulativeCounts = () => {
-    console.log("Resetting cumulative counts.");
-    setCumulativeCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
+  const resetCounts = () => {
+    console.log("Resetting counts.");
+    setCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
   };
 
   const handleDownloadCSV = () => {
@@ -191,7 +169,7 @@ const Index = () => {
     let downloadCount = parseInt(localStorage.getItem(formattedDate) || "0", 10) + 1;
     localStorage.setItem(formattedDate, downloadCount.toString());
     const filename = `${formattedDate}-CDS_Count-${downloadCount}.csv`;
-    const csvContent = [["Material", "Count"], ...Object.entries(cumulativeCounts).map(([key, value]) => [key, value])].map((e) => e.join(",")).join("\n");
+    const csvContent = [["Material", "Count"], ...Object.entries(counts).map(([key, value]) => [key, value])].map((e) => e.join(",")).join("\n");
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -219,20 +197,15 @@ const Index = () => {
     });
   };
 
-  console.log("Session Counts:", sessionCounts);
-  console.log("Cumulative Counts:", cumulativeCounts);
+  
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <CountDisplay sessionCounts={sessionCounts} cumulativeCounts={cumulativeCounts} />
+      <CountDisplay counts={counts} />
       <Button onClick={startRecording} colorScheme={isRecording ? "orange" : "green"} leftIcon={<FaMicrophone />}>
         {isRecording ? "Pause Recording" : "Start Recording"}
       </Button>
-      <CountDisplay cumulativeCounts={cumulativeCounts} />
-      <Button onClick={resetSessionCounts} colorScheme="yellow">
-        Reset Session Counts
-      </Button>
-      <Button onClick={resetCumulativeCounts} colorScheme="orange">
-        Reset Cumulative Counts
+      <Button onClick={resetCounts} colorScheme="yellow">
+        Reset Counts
       </Button>
       <Button onClick={handleDownloadCSV} colorScheme="blue">
         Download CSV

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, Button } from "@chakra-ui/react";
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -20,8 +20,11 @@ class ErrorBoundary extends Component {
       return (
         <Box p={5} shadow="md" borderWidth="1px">
           <Text fontSize="xl" fontWeight="bold" color="red.500">
-            Something went wrong.
+            An error occurred: {this.state.error.message}
           </Text>
+          <Button onClick={() => window.location.reload()} colorScheme="blue">
+            Try Again
+          </Button>
         </Box>
       );
     }

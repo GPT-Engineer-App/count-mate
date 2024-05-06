@@ -176,7 +176,7 @@ const Index = () => {
 
   const handleDownloadCSV = () => {
     const date = new Date();
-    const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+    const formattedDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}`;
     let downloadCount = parseInt(localStorage.getItem(formattedDate) || "0", 10) + 1;
     localStorage.setItem(formattedDate, downloadCount.toString());
     const filename = `${formattedDate}-CDS_Count-${downloadCount}.csv`;
@@ -193,19 +193,19 @@ const Index = () => {
 
   const installPWA = () => {
     let deferredPrompt;
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === "accepted") {
-          console.log("User accepted the A2HS prompt");
-        } else {
-          console.log("User dismissed the A2HS prompt");
-        }
-        deferredPrompt = null;
-      });
-    });
+    const triggerPWAInstallation = () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === "accepted") {
+            console.log("User accepted the A2HS prompt");
+          } else {
+            console.log("User dismissed the A2HS prompt");
+          }
+          deferredPrompt = null;
+        });
+      }
+    };
   };
 
   return (

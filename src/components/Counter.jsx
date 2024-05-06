@@ -7,7 +7,7 @@ const Counter = () => {
 
   return (
     <VStack>
-      <Text fontSize={count > 10 ? "2xl" : "xl"} color={count > 10 ? "red.500" : "green.500"}>
+      <Text fontSize={count > 10 ? "3xl" : "xl"} color={count > 10 ? "red.600" : "green.400"}>
         {count}
       </Text>
       <Button colorScheme="blue" onClick={increment}>

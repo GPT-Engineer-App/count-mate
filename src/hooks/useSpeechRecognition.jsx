@@ -47,8 +47,12 @@ const useSpeechRecognition = () => {
     recognition.addEventListener("audioend", handleAudioEnd);
 
     return () => {
-      recognition.removeEventListener("audiostart", handleAudioStart);
-      recognition.removeEventListener("audioend", handleAudioEnd);
+      if (recognition) {
+        recognition.removeEventListener("audiostart", handleAudioStart);
+        recognition.removeEventListener("audioend", handleAudioEnd);
+        recognition.stop();
+        console.log("Cleanup: Removed event listeners and stopped recognition to prevent state updates after unmount.");
+      }
     };
   }, [recognition, startRecording, stopRecording, toast]);
 

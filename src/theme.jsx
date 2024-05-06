@@ -16,6 +16,12 @@ const theme = extendTheme({
         fontWeight: "bold",
         borderRadius: "md",
       },
+      sizes: {
+        md: {
+          h: "48px",
+          fontSize: "lg",
+        },
+      },
     },
     Text: {
       baseStyle: {
@@ -23,6 +29,13 @@ const theme = extendTheme({
         color: "brand.700",
       },
     },
+  },
+  breakpoints: {
+    sm: "320px",
+    md: "768px",
+    lg: "960px",
+    xl: "1200px",
+    "2xl": "1536px",
   },
 });
 

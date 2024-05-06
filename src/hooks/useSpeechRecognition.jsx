@@ -7,11 +7,18 @@ const useSpeechRecognition = () => {
     recognitionInstance.lang = "en-US";
     recognitionInstance.continuous = true;
     recognitionInstance.interimResults = true;
-    recognitionInstance.continuous = true;
-    const speechRecognitionList = new window.SpeechGrammarList();
-    const grammar = "#JSGF V1.0; grammar items; public <item> = pet | hdp | can | glass | carton ;";
-    speechRecognitionList.addFromString(grammar, 1);
-    recognitionInstance.grammars = speechRecognitionList;
+    recognitionInstance.maxAlternatives = 10;
+    recognitionInstance.grammars = new window.SpeechGrammarList();
+    recognitionInstance.grammars.addFromString("#JSGF V1.0; grammar items; public <item> = pet | hdp | can | glass | carton ;", 1);
+    recognitionInstance.onresult = (event) => {
+      setTimeout(() => {
+        const transcript = Array.from(event.results)
+          .map((result) => result[0])
+          .map((result) => result.transcript)
+          .join("");
+        setTranscript(transcript);
+      }, 500);
+    };
     return recognitionInstance;
   });
   const [sessionCounts, setSessionCounts] = useState({ PET: 0, HDP: 0, CAN: 0, GLASS: 0, CARTON: 0 });

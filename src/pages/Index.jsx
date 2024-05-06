@@ -161,6 +161,12 @@ const Index = () => {
     }
   };
 
+  const calculateAverageCountPerMinute = (counts) => {
+    const totalMinutes = (new Date() - new Date().setHours(0, 0, 0, 0)) / 60000;
+    const totalCount = Object.values(counts).reduce((total, num) => total + num, 0);
+    return (totalCount / totalMinutes).toFixed(2);
+  };
+
   const resetCounts = (type) => {
     if (type === "cumulative") {
       console.log("Resetting cumulative counts.");
@@ -220,6 +226,10 @@ const Index = () => {
       </HStack>
       <CountDisplay counts={sessionCounts} title="Session Counts" />
       <CountDisplay counts={cumulativeCounts} title="Cumulative Counts" />
+      <Box>
+        <Text>Total Counts: {Object.values(sessionCounts).reduce((total, num) => total + num, 0)}</Text>
+        <Text>Average Count per Minute: {calculateAverageCountPerMinute(sessionCounts)}</Text>
+      </Box>
       <Button colorScheme="blue" onClick={handleDownloadCSV} isDisabled={Object.values(cumulativeCounts).every((count) => count === 0)}>
         Download CSV
       </Button>

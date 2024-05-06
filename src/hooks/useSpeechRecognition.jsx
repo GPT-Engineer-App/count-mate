@@ -90,8 +90,15 @@ const useSpeechRecognition = () => {
         .join("");
       setTranscript(transcript);
       console.log("Transcript received:", transcript);
+      const controlKeywords = ["start", "stop"];
       const triggerKeywords = ["count", "add"];
       const words = transcript.toLowerCase().split(/\s+/);
+      const detectedControls = words.filter((word) => controlKeywords.includes(word));
+      if (detectedControls.includes("start")) {
+        startRecording();
+      } else if (detectedControls.includes("stop")) {
+        stopRecording();
+      }
       const detectedTriggers = words.filter((word) => triggerKeywords.includes(word)).length;
       if (detectedTriggers > 0) {
         const updatedSessionCounts = { ...sessionCounts };

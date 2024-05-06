@@ -66,7 +66,7 @@ const Index = () => {
   };
 
   function detectKeywordsCustom(text) {
-    const keywords = ["pet", "hdp", "can", "glass", "carton"];
+    const keywords = ["pet", "high-density polyethylene", "can", "glass", "carton"];
     const words = text.toLowerCase().split(/\s+/);
     return words.reduce((acc, word) => {
       if (keywords.includes(word)) {

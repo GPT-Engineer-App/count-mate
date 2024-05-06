@@ -20,7 +20,7 @@ const useSpeechRecognition = () => {
   const [transcript, setTranscript] = useState("");
 
   const detectKeywordsCustom = (transcript) => {
-    const keywords = ["pet", "hdp", "can", "glass", "carton"];
+    const keywords = ["pet", "high-density polyethylene", "can", "glass", "carton"];
     const counts = {};
     const words = transcript.toLowerCase().split(/\s+/);
     keywords.forEach((keyword) => {

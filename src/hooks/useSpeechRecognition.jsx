@@ -2,7 +2,15 @@ import { useState, useEffect } from "react";
 import { useToast } from "@chakra-ui/react";
 
 const useSpeechRecognition = () => {
-  const [recognition, setRecognition] = useState(null);
+  const [recognition, setRecognition] = useState(() => {
+    const recognitionInstance = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognitionInstance.lang = "en-US";
+    const speechRecognitionList = new window.SpeechGrammarList();
+    const grammar = "#JSGF V1.0; grammar items; public <item> = pet | hdp | can | glass | carton ;";
+    speechRecognitionList.addFromString(grammar, 1);
+    recognitionInstance.grammars = speechRecognitionList;
+    return recognitionInstance;
+  });
   const [sessionCounts, setSessionCounts] = useState({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
   const [cumulativeCounts, setCumulativeCounts] = useState(() => {
     const savedCounts = localStorage.getItem("cumulativeTally");

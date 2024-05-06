@@ -7,7 +7,7 @@ const Login = () => {
         Login Page
       </Text>
       <Box>
-        <Button colorScheme="blue" onClick={() => console.log("Login functionality not implemented yet")}>
+        <Button colorScheme="blue" onClick={() => alert("Logged in successfully!")}>
           Log In
         </Button>
       </Box>

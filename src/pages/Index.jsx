@@ -33,49 +33,25 @@ const Index = () => {
   console.log("Is Recording State:", isRecording);
   const toast = useToast();
 
-  useEffect(() => {
-    console.log("Index component mounted");
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      toast({
-        title: "Unsupported Feature",
-        description: "Speech recognition is not supported by your browser.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
+  const promptPWAInstallation = () => {
+    let deferredPrompt;
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
 
-    let recognitionInstance;
-    try {
-      recognitionInstance = new SpeechRecognition();
-      recognitionInstance.continuous = true;
-      recognitionInstance.interimResults = false;
-      recognitionInstance.lang = "en-US";
-      recognitionInstance.onresult = handleResult;
-      recognitionInstance.onerror = handleError;
-      // This line is removed as recognition is now a memoized value, not set via useState
-    } catch (error) {
-      console.error("Speech Recognition setup failed:", error);
-      toast({
-        title: "Setup Error",
-        description: "Failed to set up speech recognition.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === "accepted") {
+          console.log("User accepted the A2HS prompt");
+        } else {
+          console.log("User dismissed the A2HS prompt");
+        }
+        deferredPrompt = null;
       });
     }
-
-    return () => {
-      if (recognitionInstance) {
-        recognitionInstance.stop();
-        recognitionInstance.onresult = null;
-        recognitionInstance.onerror = null;
-        console.log("Cleanup: Removed event listeners and stopped recognition to prevent state updates after unmount.");
-      }
-    };
-  }, [toast]);
+  };
 
   const handleResult = (event) => {
     const lastResult = event.results[event.resultIndex];
@@ -197,7 +173,6 @@ const Index = () => {
     });
   };
 
-  
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
       <CountDisplay counts={counts} />

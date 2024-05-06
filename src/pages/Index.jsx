@@ -211,17 +211,14 @@ const Index = () => {
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
       <HStack width="full" justify="space-between">
-        <Button colorScheme="green" onClick={startRecording} width="50%">
-          Start Recording
+        <Button colorScheme={isRecording ? "red" : "green"} onClick={isRecording ? stopRecording : startRecording} width="50%">
+          {isRecording ? "Stop Recording" : "Start Recording"}
         </Button>
-        <Button colorScheme="red" onClick={stopRecording} isDisabled={!isRecording} width="50%">
-          Stop Recording
+        <Button colorScheme="orange" onClick={pauseRecording} isDisabled={!isRecording} width="50%">
+          Pause Recording
         </Button>
       </HStack>
       <CountDisplay counts={sessionCounts} title="Session Counts" />
-      <Button colorScheme="orange" onClick={pauseRecording} isDisabled={!isRecording}>
-        Pause Recording
-      </Button>
       <CountDisplay counts={cumulativeCounts} title="Cumulative Counts" />
       <Button colorScheme="blue" onClick={handleDownloadCSV} isDisabled={Object.values(cumulativeCounts).every((count) => count === 0)}>
         Download CSV

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSpeechRecognition } from "../hooks/useSpeechRecognition";
-import { Button, useToast } from "@chakra-ui/react";
+import { Box, Button, useToast } from "@chakra-ui/react";
 import { FaMicrophone } from "react-icons/fa";
 
 const SpeechRecognitionManager = () => {
   const { recognition, isRecording, startRecording, stopRecording, transcript, setTranscript } = useSpeechRecognition();
+  const [volume, setVolume] = useState(0);
   const toast = useToast();
 
   useEffect(() => {
@@ -28,8 +29,21 @@ const SpeechRecognitionManager = () => {
       <Button mt={2} colorScheme="blue" onClick={() => setTranscript("")}>
         Accept
       </Button>
+      <Box position="relative" w="full" h="10px" bg="gray.200">
+        <Box position="absolute" w={`${volume * 100}%`} h="full" bg="green.400" />
+      </Box>
       <Button mt={2} colorScheme="red" onClick={() => setTranscript("")}>
         Correct
+      </Button>
+      <Button
+        mt={2}
+        colorScheme="blue"
+        onClick={() => {
+          setTranscript("");
+          recognition.resetSessionCounts();
+        }}
+      >
+        Reset
       </Button>
     </>
   );

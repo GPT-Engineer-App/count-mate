@@ -91,29 +91,20 @@ const useSpeechRecognition = () => {
         .map((result) => result.transcript)
         .join("");
       setTranscript(transcript);
-      console.log("Transcript received:", transcript);
-      const controlKeywords = ["start", "stop"];
-      const triggerKeywords = ["count", "add"];
-      const words = transcript.toLowerCase().split(/\s+/);
-      const detectedControls = words.filter((word) => controlKeywords.includes(word));
-      if (detectedControls.includes("start")) {
-        startRecording();
-      } else if (detectedControls.includes("stop")) {
-        stopRecording();
-      }
-      const detectedTriggers = words.filter((word) => triggerKeywords.includes(word)).length;
-      if (detectedTriggers > 0) {
-        const updatedSessionCounts = { ...sessionCounts };
-        Object.keys(updatedSessionCounts).forEach((key) => {
-          updatedSessionCounts[key] += detectedTriggers;
-        });
-        setSessionCounts(updatedSessionCounts);
-        const updatedCumulativeCounts = { ...cumulativeCounts };
-        Object.keys(updatedCumulativeCounts).forEach((key) => {
-          updatedCumulativeCounts[key] += detectedTriggers;
-        });
-        setCumulativeCounts(updatedCumulativeCounts);
-      }
+      const detectedKeywords = detectKeywordsCustom(transcript);
+      Object.keys(detectedKeywords).forEach((key) => {
+        if (detectedKeywords[key] > 0) {
+          const newCount = sessionCounts[key] + detectedKeywords[key];
+          setSessionCounts((prevCounts) => ({ ...prevCounts, [key]: newCount }));
+          toast({
+            title: "Keyword Detected",
+            description: `${key} detected ${detectedKeywords[key]} times`,
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      });
     };
     recognition.onerror = function (event) {
       console.error("Recognition error:", event.error);

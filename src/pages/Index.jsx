@@ -29,6 +29,13 @@ const Index = () => {
       localStorage.setItem("cumulativeTally", JSON.stringify(cumulativeCounts));
     } catch (e) {
       console.error("Error saving cumulativeTally to localStorage:", e);
+      toast({
+        title: "Storage Error",
+        description: "Failed to save data to local storage.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   }, [cumulativeCounts]);
   console.log("Cumulative Counts State:", cumulativeCounts);
@@ -50,15 +57,31 @@ const Index = () => {
       return;
     }
 
-    const recognitionInstance = new SpeechRecognition();
-    recognitionInstance.continuous = true;
-    recognitionInstance.interimResults = false;
-    recognitionInstance.lang = "en-US";
-    recognitionInstance.onresult = handleResult;
-    recognitionInstance.onerror = handleError;
-    setRecognition(recognitionInstance);
+    let recognitionInstance;
+    try {
+      recognitionInstance = new SpeechRecognition();
+      recognitionInstance.continuous = true;
+      recognitionInstance.interimResults = false;
+      recognitionInstance.lang = "en-US";
+      recognitionInstance.onresult = handleResult;
+      recognitionInstance.onerror = handleError;
+      setRecognition(recognitionInstance);
+    } catch (error) {
+      console.error("Speech Recognition setup failed:", error);
+      toast({
+        title: "Setup Error",
+        description: "Failed to set up speech recognition.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
 
-    return () => recognitionInstance.stop(); // Cleanup on unmount
+    return () => {
+      if (recognitionInstance) {
+        recognitionInstance.stop();
+      }
+    };
   }, [toast]);
 
   const handleResult = (event) => {

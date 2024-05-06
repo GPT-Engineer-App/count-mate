@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useReducer } from "react";
-import { VStack, Button, useToast, StackDivider, Box, Heading, Text } from "@chakra-ui/react";
+import { VStack, HStack, Button, useToast, StackDivider, Box, Heading, Text } from "@chakra-ui/react";
 import { FaMicrophone } from "react-icons/fa";
 import useSpeechRecognition from "../hooks/useSpeechRecognition";
 import CountDisplay from "../components/CountDisplay";
@@ -206,12 +206,15 @@ const Index = () => {
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <Button colorScheme="green" onClick={startRecording}>
-        Start Recording
-      </Button>
-      <Button colorScheme="red" onClick={stopRecording} isDisabled={!isRecording}>
-        Stop Recording
-      </Button>
+      <HStack width="full" justify="space-between">
+        <Button colorScheme="green" onClick={startRecording} width="50%">
+          Start Recording
+        </Button>
+        <Button colorScheme="red" onClick={stopRecording} isDisabled={!isRecording} width="50%">
+          Stop Recording
+        </Button>
+      </HStack>
+      <CountDisplay counts={sessionCounts} />
       <Button colorScheme="orange" onClick={pauseRecording} isDisabled={!isRecording}>
         Pause Recording
       </Button>
@@ -219,7 +222,6 @@ const Index = () => {
       <Button colorScheme="blue" onClick={handleDownloadCSV} isDisabled={Object.values(sessionCounts).every((count) => count === 0)}>
         Download CSV
       </Button>
-      <CountDisplay counts={sessionCounts} />
     </VStack>
   );
 };

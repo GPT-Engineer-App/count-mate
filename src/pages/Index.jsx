@@ -3,6 +3,7 @@ import { VStack, Button, useToast, StackDivider, Box, Heading, Text } from "@cha
 import { FaMicrophone } from "react-icons/fa";
 import useSpeechRecognition from "../hooks/useSpeechRecognition";
 import CountDisplay from "../components/CountDisplay";
+import MicrophoneButton from "../components/MicrophoneButton";
 
 const Index = () => {
   console.log("Index component rendering");
@@ -211,15 +212,7 @@ const Index = () => {
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <Button onClick={pauseRecording} colorScheme="yellow">
-        Pause Recording
-      </Button>
-      <Button onClick={abortRecording} colorScheme="red">
-        Abort Recording
-      </Button>
-      <Button onClick={startRecording} colorScheme={isRecording ? "orange" : "green"} leftIcon={<FaMicrophone />}>
-        {isRecording ? "Pause Recording" : "Start Recording"}
-      </Button>
+      <MicrophoneButton isRecording={isRecording} startRecording={startRecording} pauseRecording={pauseRecording} abortRecording={abortRecording} />
       <CountDisplay counts={counts} />
       <Button onClick={() => resetCounts("cumulative")} colorScheme="yellow">
         Cumulative Reset

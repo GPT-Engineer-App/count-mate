@@ -1,7 +1,5 @@
-const CACHE_NAME = "version-1";
-const urlsToCache = ["index.html", "offline.html"];
-
-const self = this;
+const CACHE_NAME = "v1";
+const urlsToCache = ["index.html", "offline.html", "styles/main.css", "scripts/main.js", "images/logo.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -14,25 +12,28 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then(() => {
-      return fetch(event.request).catch(() => caches.match("offline.html"));
-    }),
-  );
-});
-
-self.addEventListener("activate", (event) => {
-  const cacheWhitelist = [];
-  cacheWhitelist.push(CACHE_NAME);
-
-  event.waitUntil(
-    caches.keys().then((cacheNames) =>
-      Promise.all(
-        cacheNames.map((cacheName) => {
-          if (!cacheWhitelist.includes(cacheName)) {
-            return caches.delete(cacheName);
+    caches
+      .match(event.request)
+      .then((response) => {
+        if (response) {
+          return response;
+        }
+        return fetch(event.request).then((response) => {
+          if (!response || response.status !== 200 || response.type !== "basic") {
+            return response;
           }
-        }),
-      ),
-    ),
+
+          var responseToCache = response.clone();
+
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+
+          return response;
+        });
+      })
+      .catch(() => {
+        return caches.match("offline.html");
+      }),
   );
 });

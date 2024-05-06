@@ -14,18 +14,17 @@ const colors = {
 const theme = extendTheme({ colors, components: { Button: { baseStyle: { fontWeight: "bold" } } } });
 
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", async () => {
-    try {
-      const registration = await navigator.serviceWorker.register("/service-worker.js");
-      console.log("SW registered: ", registration);
-      await registration.update();
-    } catch (registrationError) {
-      console.log("SW registration failed: ", registrationError);
-    }
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/service-worker.js")
+      .then((registration) => {
+        console.log("SW registered: ", registration);
+      })
+      .catch((registrationError) => {
+        console.log("SW registration failed: ", registrationError);
+      });
   });
 }
-
-
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <ChakraProvider theme={theme}>

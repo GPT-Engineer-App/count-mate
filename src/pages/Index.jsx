@@ -37,6 +37,7 @@ const Index = () => {
   const toast = useToast();
 
   useEffect(() => {
+    console.log("Index component mounted");
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
       toast({

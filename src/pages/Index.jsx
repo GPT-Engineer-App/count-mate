@@ -62,21 +62,25 @@ const Index = () => {
       const keywordRegex = /\b(pet|hdp|can|glass|carton)\b/gi;
       const matches = transcript.match(keywordRegex);
       if (matches && matches.length) {
-        setSessionCounts((prevCounts) => {
-          const updatedCounts = { ...prevCounts };
-          matches.forEach((keyword) => {
-            updatedCounts[keyword] = (updatedCounts[keyword] || 0) + 1;
-          });
-          return updatedCounts;
-        });
+        setSessionCounts((prevCounts) =>
+          matches.reduce(
+            (acc, keyword) => {
+              acc[keyword] = (acc[keyword] || 0) + 1;
+              return acc;
+            },
+            { ...prevCounts },
+          ),
+        );
 
-        setCumulativeCounts((prevCounts) => {
-          const updatedCounts = { ...prevCounts };
-          matches.forEach((keyword) => {
-            updatedCounts[keyword] = (updatedCounts[keyword] || 0) + 1;
-          });
-          return updatedCounts;
-        });
+        setCumulativeCounts((prevCounts) =>
+          matches.reduce(
+            (acc, keyword) => {
+              acc[keyword] = (acc[keyword] || 0) + 1;
+              return acc;
+            },
+            { ...prevCounts },
+          ),
+        );
         localStorage.setItem("cumulativeTally", JSON.stringify(cumulativeCounts));
         toast({
           title: "Keyword Detected",

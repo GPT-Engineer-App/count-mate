@@ -42,7 +42,7 @@ const Index = () => {
     const lastResult = event.results[event.resultIndex];
     if (lastResult.isFinal) {
       const transcript = lastResult[0].transcript.trim().toLowerCase();
-      detectKeywords(transcript);
+      detectKeywordsCustom(transcript);
     }
   };
 
@@ -57,56 +57,17 @@ const Index = () => {
     });
   };
 
-  const detectKeywords = (transcript) => {
-    try {
-      const keywordRegex = /\b(pet|hdp|can|glass|carton)\b/gi;
-      const matches = transcript.match(keywordRegex);
-      if (matches && matches.length) {
-        setSessionCounts((prevCounts) => {
-          const updatedCounts = { ...prevCounts };
-          matches.forEach((keyword) => {
-            updatedCounts[keyword.toLowerCase()] = (updatedCounts[keyword.toLowerCase()] || 0) + 1;
-          });
-          return updatedCounts;
-        });
-
-        setCumulativeCounts((prevCounts) =>
-          matches.reduce(
-            (acc, keyword) => {
-              acc[keyword] = (acc[keyword] || 0) + 1;
-              return acc;
-            },
-            { ...prevCounts },
-          ),
-        );
-        localStorage.setItem("cumulativeTally", JSON.stringify(cumulativeCounts));
-        toast({
-          title: "Keyword Detected",
-          description: `Updated counts for ${matches.join(", ")}.`,
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
-      } else {
-        toast({
-          title: "No Keywords Detected",
-          description: "No valid keywords detected in the last speech segment.",
-          status: "warning",
-          duration: 2000,
-          isClosable: true,
-        });
+  function detectKeywordsCustom(text) {
+    const keywords = ["pet", "hdp", "can", "glass", "carton"];
+    text = text.toLowerCase();
+    const words = text.split(/\s+/);
+    return words.reduce((acc, word) => {
+      if (keywords.includes(word)) {
+        acc[word] = true;
       }
-    } catch (error) {
-      console.error("Error in keyword detection:", error);
-      toast({
-        title: "Error",
-        description: "An error occurred during keyword detection.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
+      return acc;
+    }, {});
+  }
 
   const startRecording = () => {
     setIsRecording((prevIsRecording) => {

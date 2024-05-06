@@ -1,11 +1,15 @@
-import React from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Index from "./pages/Index";
+import Login from "./pages/Login";
 
 function App() {
   return (
-    <Box textAlign="center" mt="20">
-      <Text fontSize="2xl">This application has been unpublished.</Text>
-    </Box>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -13,6 +13,7 @@ const Index = () => {
     const savedCounts = localStorage.getItem("cumulativeTally");
     return savedCounts ? JSON.parse(savedCounts) : { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 };
   });
+  const sessionCounts = counts;
   console.log("Counts State:", counts);
 
   useEffect(() => {
@@ -199,8 +200,8 @@ const Index = () => {
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
       <MicrophoneButton isRecording={isRecording} startRecording={startRecording} pauseRecording={pauseRecording} abortRecording={abortRecording} />
-      <CountDisplay counts={counts} />
-      <Button colorScheme="blue" onClick={handleDownloadCSV}>
+      <CountDisplay counts={sessionCounts} />
+      <Button colorScheme="blue" onClick={handleDownloadCSV} isDisabled={Object.values(sessionCounts).every((count) => count === 0)}>
         Download CSV
       </Button>
       {}

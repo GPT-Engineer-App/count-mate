@@ -14,10 +14,10 @@ const SpeechRecognitionInterface = () => {
         Accept
       </Button>
       <Text mt={4}>{transcript}</Text>
-      <Button mt={2} colorScheme="blue" onClick={() => setTranscript("")}>
+      <Button mt={2} colorScheme="blue" onClick={() => setTranscript("")} isDisabled={!transcript}>
         Accept
       </Button>
-      <Button mt={2} colorScheme="red" onClick={() => setTranscript("")}>
+      <Button mt={2} colorScheme="red" onClick={() => setTranscript("")} isDisabled={!transcript}>
         Correct
       </Button>
     </>

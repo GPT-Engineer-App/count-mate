@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useReducer } from "react";
 import { VStack, Button, useToast, StackDivider, Box, Heading, Text } from "@chakra-ui/react";
 import { FaMicrophone } from "react-icons/fa";
 import useSpeechRecognition from "../hooks/useSpeechRecognition";
@@ -6,7 +6,7 @@ import CountDisplay from "../components/CountDisplay";
 
 const Index = () => {
   console.log("Index component rendering");
-  const [recognition, setRecognition] = useState(null);
+  const recognition = useMemo(() => new (window.SpeechRecognition || window.webkitSpeechRecognition)(), []);
   console.log("Recognition State:", recognition);
   const [sessionCounts, setSessionCounts] = useState({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
   console.log("Session Counts State:", sessionCounts);
@@ -39,7 +39,7 @@ const Index = () => {
     }
   }, [cumulativeCounts]);
   console.log("Cumulative Counts State:", cumulativeCounts);
-  const [isRecording, setIsRecording] = useState(false);
+  const [isRecording, setIsRecording] = useReducer((state) => !state, false);
   console.log("Is Recording State:", isRecording);
   const toast = useToast();
 
@@ -65,7 +65,7 @@ const Index = () => {
       recognitionInstance.lang = "en-US";
       recognitionInstance.onresult = handleResult;
       recognitionInstance.onerror = handleError;
-      setRecognition(recognitionInstance);
+      // This line is removed as recognition is now a memoized value, not set via useState
     } catch (error) {
       console.error("Speech Recognition setup failed:", error);
       toast({

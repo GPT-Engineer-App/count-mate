@@ -122,25 +122,11 @@ const Index = () => {
   const resetSessionCounts = () => {
     console.log("Resetting session counts.");
     setSessionCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
-    toast({
-      title: "Session Counts Reset",
-      description: "All session tallies have been reset.",
-      status: "warning",
-      duration: 3000,
-      isClosable: true,
-    });
   };
 
   const resetCumulativeCounts = () => {
     console.log("Resetting cumulative counts.");
     setCumulativeCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
-    toast({
-      title: "Cumulative Counts Reset",
-      description: "All cumulative tallies have been reset.",
-      status: "warning",
-      duration: 3000,
-      isClosable: true,
-    });
   };
 
   const handleDownloadCSV = () => {

@@ -53,13 +53,13 @@ const useSpeechRecognition = () => {
   }, [recognition, startRecording, stopRecording, toast]);
 
   const resetSessionCounts = () => {
-    setSessionCounts((prevCounts) => ({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 }));
+    console.log("Resetting session counts.");
+    setSessionCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
   };
 
   const resetCumulativeCounts = () => {
-    console.log("Resetting cumulative counts. Current cumulative counts:", cumulativeCounts);
+    console.log("Resetting cumulative counts.");
     setCumulativeCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
-    console.log("Cumulative counts after reset:", cumulativeCounts);
   };
 
   return { recognition, sessionCounts, cumulativeCounts, isRecording, startRecording, stopRecording, resetSessionCounts, resetCumulativeCounts };

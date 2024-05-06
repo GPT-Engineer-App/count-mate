@@ -29,6 +29,31 @@ const useSpeechRecognition = () => {
     }
   };
 
+  useEffect(() => {
+    recognition.onresult = (event) => {
+      const transcript = Array.from(event.results)
+        .map((result) => result[0])
+        .map((result) => result.transcript)
+        .join("");
+      setTranscript(transcript);
+    };
+
+    recognition.onerror = (event) => {
+      toast({
+        title: "Recognition Error",
+        description: `An error occurred during speech recognition: ${event.error}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    };
+
+    return () => {
+      recognition.onresult = null;
+      recognition.onerror = null;
+    };
+  }, [recognition, toast]);
+
   return { recognition, isRecording, startRecording, stopRecording, transcript, setTranscript };
 };
 

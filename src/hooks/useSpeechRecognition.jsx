@@ -5,6 +5,8 @@ const useSpeechRecognition = () => {
   const [recognition, setRecognition] = useState(() => {
     const recognitionInstance = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognitionInstance.lang = "en-US";
+    recognitionInstance.continuous = true;
+    recognitionInstance.interimResults = true;
     const speechRecognitionList = new window.SpeechGrammarList();
     const grammar = "#JSGF V1.0; grammar items; public <item> = pet | hdp | can | glass | carton ;";
     speechRecognitionList.addFromString(grammar, 1);

@@ -104,6 +104,13 @@ const Index = () => {
             duration: 3000,
             isClosable: true,
           });
+          toast({
+            title: "Recording Started",
+            description: "You may start speaking your counts now.",
+            status: "info",
+            duration: 3000,
+            isClosable: true,
+          });
         } else {
           recognition.stop();
           console.log("Recording paused.");
@@ -199,12 +206,20 @@ const Index = () => {
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <MicrophoneButton isRecording={isRecording} startRecording={startRecording} pauseRecording={pauseRecording} abortRecording={abortRecording} />
+      <Button colorScheme="green" onClick={startRecording}>
+        Start Recording
+      </Button>
+      <Button colorScheme="red" onClick={stopRecording} isDisabled={!isRecording}>
+        Stop Recording
+      </Button>
+      <Button colorScheme="orange" onClick={pauseRecording} isDisabled={!isRecording}>
+        Pause Recording
+      </Button>
       <CountDisplay counts={sessionCounts} />
       <Button colorScheme="blue" onClick={handleDownloadCSV} isDisabled={Object.values(sessionCounts).every((count) => count === 0)}>
         Download CSV
       </Button>
-      {}
+      <CountDisplay counts={sessionCounts} />
     </VStack>
   );
 };

@@ -27,9 +27,26 @@ const useSpeechRecognition = () => {
     }
   };
 
+  const pauseRecording = () => {
+    if (recognition && isRecording) {
+      recognition.stop();
+      setIsRecording(false);
+      console.log("Recording paused.");
+    }
+  };
+
+  const abortRecording = () => {
+    if (recognition) {
+      recognition.abort();
+      setIsRecording(false);
+      console.log("Recording aborted.");
+    }
+  };
+
   const stopRecording = () => {
     if (recognition) {
       recognition.stop();
+      setIsRecording(false);
       console.log("Recording stopped.");
     }
   };

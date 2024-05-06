@@ -87,6 +87,21 @@ const Index = () => {
     }, {});
   }
 
+  const pauseRecording = () => {
+    if (recognition && isRecording) {
+      recognition.stop();
+      setIsRecording(false);
+      console.log("Recording paused.");
+      toast({
+        title: "Recording Paused",
+        description: "Speech recognition paused.",
+        status: "info",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   const startRecording = () => {
     setIsRecording((prevIsRecording) => {
       if (recognition) {
@@ -114,6 +129,21 @@ const Index = () => {
       }
       return !prevIsRecording;
     });
+  };
+
+  const abortRecording = () => {
+    if (recognition && isRecording) {
+      recognition.stop();
+      setIsRecording(false);
+      console.log("Recording aborted.");
+      toast({
+        title: "Recording Aborted",
+        description: "Speech recognition aborted.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   const stopRecording = () => {
@@ -172,6 +202,12 @@ const Index = () => {
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
+      <Button onClick={pauseRecording} colorScheme="yellow">
+        Pause Recording
+      </Button>
+      <Button onClick={abortRecording} colorScheme="red">
+        Abort Recording
+      </Button>
       <CountDisplay counts={counts} />
       <Button onClick={startRecording} colorScheme={isRecording ? "orange" : "green"} leftIcon={<FaMicrophone />}>
         {isRecording ? "Pause Recording" : "Start Recording"}

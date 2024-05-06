@@ -10,10 +10,10 @@ const Counter = () => {
       <Text fontSize={count > 10 ? "3xl" : "xl"} color={count > 10 ? "red.600" : "green.400"}>
         {count}
       </Text>
-      <Button colorScheme="blue" onClick={increment}>
+      <Button colorScheme="blue" onClick={() => increment()}>
         Increment
       </Button>
-      <Button colorScheme="red" onClick={decrement}>
+      <Button colorScheme="red" onClick={() => decrement()}>
         Decrement
       </Button>
     </VStack>

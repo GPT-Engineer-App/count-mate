@@ -18,6 +18,7 @@ const useSpeechRecognition = () => {
   });
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
+  const [counter, setCounter] = useState(0);
 
   const detectKeywordsCustom = (transcript) => {
     const keywords = ["pet", "high-density polyethylene", "can", "glass", "carton"];
@@ -89,21 +90,21 @@ const useSpeechRecognition = () => {
         .join("");
       setTranscript(transcript);
       console.log("Transcript received:", transcript);
-      const detectedCounts = detectKeywordsCustom(transcript);
-      setSessionCounts((prevCounts) => {
-        const updatedCounts = { ...prevCounts };
-        Object.keys(detectedCounts).forEach((key) => {
-          updatedCounts[key.toUpperCase()] = (updatedCounts[key.toUpperCase()] || 0) + detectedCounts[key];
+      const triggerKeywords = ["count", "add"];
+      const words = transcript.toLowerCase().split(/\s+/);
+      const detectedTriggers = words.filter((word) => triggerKeywords.includes(word)).length;
+      if (detectedTriggers > 0) {
+        setCounter((prevCounter) => prevCounter + detectedTriggers);
+      }
+      if (detectedTriggers > 0) {
+        toast({
+          title: "Trigger Keyword Detected",
+          description: `Trigger keyword detected. Counter updated to ${counter + detectedTriggers}.`,
+          status: "success",
+          duration: 5000,
+          isClosable: true,
         });
-        return updatedCounts;
-      });
-      toast({
-        title: "Keywords Detected",
-        description: `Detected keywords and updated counts: ${JSON.stringify(detectedCounts)}`,
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
+      }
     };
     recognition.onerror = function (event) {
       console.error("Recognition error:", event.error);

@@ -80,7 +80,9 @@ const Index = () => {
     return () => {
       if (recognitionInstance) {
         recognitionInstance.stop();
-        console.log("Cleanup: Stopping recognition instance to prevent state updates after unmount.");
+        recognitionInstance.onresult = null;
+        recognitionInstance.onerror = null;
+        console.log("Cleanup: Removed event listeners and stopped recognition to prevent state updates after unmount.");
       }
     };
   }, [toast]);

@@ -5,13 +5,18 @@ import useSpeechRecognition from "../hooks/useSpeechRecognition";
 import CountDisplay from "../components/CountDisplay";
 
 const Index = () => {
+  console.log("Index component rendering");
   const [recognition, setRecognition] = useState(null);
+  console.log("Recognition State:", recognition);
   const [sessionCounts, setSessionCounts] = useState({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
+  console.log("Session Counts State:", sessionCounts);
   const [cumulativeCounts, setCumulativeCounts] = useState(() => {
     const savedCounts = localStorage.getItem("cumulativeTally");
     return savedCounts ? JSON.parse(savedCounts) : { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 };
   });
+  console.log("Cumulative Counts State:", cumulativeCounts);
   const [isRecording, setIsRecording] = useState(false);
+  console.log("Is Recording State:", isRecording);
   const toast = useToast();
 
   useEffect(() => {

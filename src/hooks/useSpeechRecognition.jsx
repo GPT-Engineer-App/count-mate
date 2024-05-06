@@ -52,8 +52,8 @@ const useSpeechRecognition = () => {
       });
     };
 
-    recognition.addEventListener("audiostart", handleAudioStart);
-    recognition.addEventListener("audioend", handleAudioEnd);
+    recognition.onaudiostart = handleAudioStart;
+    recognition.onaudioend = handleAudioEnd;
     recognition.onresult = function (event) {
       const transcript = Array.from(event.results)
         .map((result) => result[0])
@@ -67,12 +67,10 @@ const useSpeechRecognition = () => {
     };
 
     return () => {
-      if (recognition) {
-        recognition.removeEventListener("audiostart", handleAudioStart);
-        recognition.removeEventListener("audioend", handleAudioEnd);
-        recognition.stop();
-        console.log("Cleanup: Removed event listeners and stopped recognition to prevent state updates after unmount.");
-      }
+      recognition.onaudiostart = null;
+      recognition.onaudioend = null;
+      recognition.stop();
+      console.log("Cleanup: Removed event listeners and stopped recognition to prevent state updates after unmount.");
     };
   }, [recognition, startRecording, stopRecording, toast]);
 

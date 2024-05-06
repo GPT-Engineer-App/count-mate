@@ -35,10 +35,7 @@ const Index = () => {
 
   const promptPWAInstallation = () => {
     let deferredPrompt;
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-    });
+    // Removed to prevent potential memory leak by adding multiple event listeners
 
     if (deferredPrompt) {
       deferredPrompt.prompt();

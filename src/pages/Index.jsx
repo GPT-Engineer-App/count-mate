@@ -121,6 +121,13 @@ const Index = () => {
         duration: 3000,
         isClosable: true,
       });
+
+      setCumulativeCounts((prevCumulative) => ({
+        ...prevCumulative,
+        ...sessionCounts,
+      }));
+
+      setSessionCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
     }
   };
 

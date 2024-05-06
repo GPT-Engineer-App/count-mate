@@ -65,6 +65,7 @@ const Index = () => {
   function detectKeywordsCustom(text) {
     const keywords = ["pet", "hdp", "can", "glass", "carton"];
     text = text.toLowerCase();
+    console.log("Detected words:", text);
     const words = text.split(/\s+/);
     return words.reduce((acc, word) => {
       if (keywords.includes(word)) {
@@ -119,6 +120,7 @@ const Index = () => {
   };
 
   const resetSessionCounts = () => {
+    console.log("Resetting session counts.");
     setSessionCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
     toast({
       title: "Session Counts Reset",
@@ -130,6 +132,7 @@ const Index = () => {
   };
 
   const resetCumulativeCounts = () => {
+    console.log("Resetting cumulative counts.");
     setCumulativeCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
     toast({
       title: "Cumulative Counts Reset",
@@ -174,9 +177,11 @@ const Index = () => {
     });
   };
 
+  console.log("Session Counts:", sessionCounts);
+  console.log("Cumulative Counts:", cumulativeCounts);
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <CountDisplay sessionCounts={sessionCounts} />
+      <CountDisplay sessionCounts={sessionCounts} cumulativeCounts={cumulativeCounts} />
       <Button onClick={startRecording} colorScheme={isRecording ? "orange" : "green"} leftIcon={<FaMicrophone />}>
         {isRecording ? "Pause Recording" : "Start Recording"}
       </Button>

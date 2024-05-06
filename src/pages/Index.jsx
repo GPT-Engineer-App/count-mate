@@ -200,6 +200,9 @@ const Index = () => {
     <VStack spacing={4} align="center" justify="center" height="100vh">
       <MicrophoneButton isRecording={isRecording} startRecording={startRecording} pauseRecording={pauseRecording} abortRecording={abortRecording} />
       <CountDisplay counts={counts} />
+      <Button colorScheme="blue" onClick={handleDownloadCSV}>
+        Download CSV
+      </Button>
       {}
     </VStack>
   );

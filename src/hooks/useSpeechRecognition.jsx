@@ -24,7 +24,7 @@ const useSpeechRecognition = () => {
     const counts = {};
     const words = transcript.toLowerCase().split(/\s+/);
     keywords.forEach((keyword) => {
-      counts[keyword] = words.filter((word) => word === keyword).length;
+      counts[keyword.toUpperCase()] = words.filter((word) => word === keyword).length;
     });
     return counts;
   };

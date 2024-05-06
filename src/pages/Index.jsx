@@ -13,6 +13,10 @@ const Index = () => {
     const savedCounts = localStorage.getItem("cumulativeTally");
     return savedCounts ? JSON.parse(savedCounts) : { pet: 0, hdp: 0, can: 0, glass: 0, carton: 0 };
   });
+  const [cumulativeCounts, setCumulativeCounts] = useState(() => {
+    const savedCumulativeCounts = localStorage.getItem("dailyTally");
+    return savedCumulativeCounts ? JSON.parse(savedCumulativeCounts) : { pet: 0, hdp: 0, can: 0, glass: 0, carton: 0 };
+  });
   const sessionCounts = counts;
   console.log("Counts State:", counts);
 
@@ -214,12 +218,13 @@ const Index = () => {
           Stop Recording
         </Button>
       </HStack>
-      <CountDisplay counts={sessionCounts} />
+      <CountDisplay counts={sessionCounts} title="Session Counts" />
       <Button colorScheme="orange" onClick={pauseRecording} isDisabled={!isRecording}>
         Pause Recording
       </Button>
+      <CountDisplay counts={cumulativeCounts} title="Cumulative Counts" />
       <CountDisplay counts={sessionCounts} />
-      <Button colorScheme="blue" onClick={handleDownloadCSV} isDisabled={Object.values(sessionCounts).every((count) => count === 0)}>
+      <Button colorScheme="blue" onClick={handleDownloadCSV} isDisabled={Object.values(cumulativeCounts).every((count) => count === 0)}>
         Download CSV
       </Button>
     </VStack>

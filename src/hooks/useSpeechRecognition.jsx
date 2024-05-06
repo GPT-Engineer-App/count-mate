@@ -11,10 +11,10 @@ const useSpeechRecognition = () => {
     recognitionInstance.grammars = speechRecognitionList;
     return recognitionInstance;
   });
-  const [sessionCounts, setSessionCounts] = useState({ pet: 0, hdp: 0, can: 0, glass: 0, carton: 0 });
+  const [sessionCounts, setSessionCounts] = useState({ PET: 0, HDP: 0, CAN: 0, GLASS: 0, CARTON: 0 });
   const [cumulativeCounts, setCumulativeCounts] = useState(() => {
     const savedCounts = localStorage.getItem("cumulativeTally");
-    return savedCounts ? JSON.parse(savedCounts) : { pet: 0, hdp: 0, can: 0, glass: 0, carton: 0 };
+    return savedCounts ? JSON.parse(savedCounts) : { PET: 0, HDP: 0, CAN: 0, GLASS: 0, CARTON: 0 };
   });
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
@@ -94,16 +94,16 @@ const useSpeechRecognition = () => {
       const words = transcript.toLowerCase().split(/\s+/);
       const detectedTriggers = words.filter((word) => triggerKeywords.includes(word)).length;
       if (detectedTriggers > 0) {
-        setCounter((prevCounter) => prevCounter + detectedTriggers);
-      }
-      if (detectedTriggers > 0) {
-        toast({
-          title: "Trigger Keyword Detected",
-          description: `Trigger keyword detected. Counter updated to ${counter + detectedTriggers}.`,
-          status: "success",
-          duration: 5000,
-          isClosable: true,
+        const updatedSessionCounts = { ...sessionCounts };
+        Object.keys(updatedSessionCounts).forEach((key) => {
+          updatedSessionCounts[key] += detectedTriggers;
         });
+        setSessionCounts(updatedSessionCounts);
+        const updatedCumulativeCounts = { ...cumulativeCounts };
+        Object.keys(updatedCumulativeCounts).forEach((key) => {
+          updatedCumulativeCounts[key] += detectedTriggers;
+        });
+        setCumulativeCounts(updatedCumulativeCounts);
       }
     };
     recognition.onerror = function (event) {

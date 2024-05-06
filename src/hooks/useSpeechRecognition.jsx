@@ -17,6 +17,7 @@ const useSpeechRecognition = () => {
     return savedCounts ? JSON.parse(savedCounts) : { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 };
   });
   const [isRecording, setIsRecording] = useState(false);
+  const [transcript, setTranscript] = useState("");
   const toast = useToast();
 
   const startRecording = () => {
@@ -58,6 +59,7 @@ const useSpeechRecognition = () => {
         .map((result) => result[0])
         .map((result) => result.transcript)
         .join("");
+      setTranscript(transcript);
       console.log("Transcript:", transcript);
     };
     recognition.onerror = function (event) {

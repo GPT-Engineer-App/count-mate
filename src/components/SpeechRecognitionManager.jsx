@@ -4,7 +4,7 @@ import { Button, useToast } from "@chakra-ui/react";
 import { FaMicrophone } from "react-icons/fa";
 
 const SpeechRecognitionManager = () => {
-  const { recognition, isRecording, startRecording, stopRecording } = useSpeechRecognition();
+  const { recognition, isRecording, startRecording, stopRecording, transcript, setTranscript } = useSpeechRecognition();
   const toast = useToast();
 
   useEffect(() => {
@@ -20,9 +20,18 @@ const SpeechRecognitionManager = () => {
   }, [recognition, toast]);
 
   return (
-    <Button onClick={isRecording ? stopRecording : startRecording} colorScheme={isRecording ? "red" : "green"} leftIcon={<FaMicrophone />}>
-      {isRecording ? "Stop Recording" : "Start Recording"}
-    </Button>
+    <>
+      <Button onClick={isRecording ? stopRecording : startRecording} colorScheme={isRecording ? "red" : "green"} leftIcon={<FaMicrophone />}>
+        {isRecording ? "Stop Recording" : "Start Recording"}
+      </Button>
+      <Text mt={4}>{transcript}</Text>
+      <Button mt={2} colorScheme="blue" onClick={() => setTranscript("")}>
+        Accept
+      </Button>
+      <Button mt={2} colorScheme="red" onClick={() => setTranscript("")}>
+        Correct
+      </Button>
+    </>
   );
 };
 

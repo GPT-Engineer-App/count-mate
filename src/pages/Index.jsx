@@ -204,7 +204,6 @@ const Index = () => {
       <Button colorScheme="blue" onClick={handleDownloadCSV} isDisabled={Object.values(sessionCounts).every((count) => count === 0)}>
         Download CSV
       </Button>
-      {}
     </VStack>
   );
 };

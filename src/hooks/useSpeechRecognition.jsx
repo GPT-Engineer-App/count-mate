@@ -34,7 +34,7 @@ const useSpeechRecognition = () => {
     if (recognition) {
       recognition.start();
       setIsRecording(true);
-      console.log("Recording started.");
+      // Removed console.log for production
     }
   };
 
@@ -42,7 +42,7 @@ const useSpeechRecognition = () => {
     if (recognition && isRecording) {
       recognition.stop();
       setIsRecording(false);
-      console.log("Recording paused.");
+      // Removed console.log for production
     }
   };
 
@@ -50,7 +50,7 @@ const useSpeechRecognition = () => {
     if (recognition) {
       recognition.abort();
       setIsRecording(false);
-      console.log("Recording aborted.");
+      // Removed console.log for production
     }
   };
 
@@ -58,7 +58,7 @@ const useSpeechRecognition = () => {
     if (recognition) {
       recognition.stop();
       setIsRecording(false);
-      console.log("Recording stopped.");
+      // Removed console.log for production
     }
   };
 
@@ -118,12 +118,12 @@ const useSpeechRecognition = () => {
   }, [recognition, startRecording, stopRecording, toast]);
 
   const resetSessionCounts = () => {
-    console.log("Resetting session counts.");
+    // Removed console.log for production
     setSessionCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
   };
 
   const resetCumulativeCounts = () => {
-    console.log("Resetting cumulative counts.");
+    // Removed console.log for production
     setCumulativeCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
   };
 

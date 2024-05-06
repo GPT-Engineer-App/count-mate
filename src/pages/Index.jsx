@@ -161,9 +161,17 @@ const Index = () => {
     }
   };
 
-  const resetCounts = () => {
-    console.log("Resetting counts.");
-    setCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
+  const resetCounts = (type) => {
+    if (type === "cumulative") {
+      console.log("Resetting cumulative counts.");
+      setCounts({ PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 });
+    } else if (type === "session") {
+      console.log("Resetting session counts.");
+    }
+  };
+
+  const pushCount = () => {
+    console.log("Pushing cumulative counts to session.");
   };
 
   const handleDownloadCSV = () => {
@@ -208,12 +216,18 @@ const Index = () => {
       <Button onClick={abortRecording} colorScheme="red">
         Abort Recording
       </Button>
-      <CountDisplay counts={counts} />
       <Button onClick={startRecording} colorScheme={isRecording ? "orange" : "green"} leftIcon={<FaMicrophone />}>
         {isRecording ? "Pause Recording" : "Start Recording"}
       </Button>
-      <Button onClick={resetCounts} colorScheme="yellow">
-        Reset Counts
+      <CountDisplay counts={counts} />
+      <Button onClick={() => resetCounts("cumulative")} colorScheme="yellow">
+        Cumulative Reset
+      </Button>
+      <Button onClick={() => resetCounts("session")} colorScheme="yellow">
+        Session Reset
+      </Button>
+      <Button onClick={pushCount} colorScheme="blue">
+        Push Count
       </Button>
       <Button onClick={handleDownloadCSV} colorScheme="blue">
         Download CSV

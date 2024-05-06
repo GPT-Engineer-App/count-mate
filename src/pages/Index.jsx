@@ -62,15 +62,13 @@ const Index = () => {
       const keywordRegex = /\b(pet|hdp|can|glass|carton)\b/gi;
       const matches = transcript.match(keywordRegex);
       if (matches && matches.length) {
-        setSessionCounts((prevCounts) =>
-          matches.reduce(
-            (acc, keyword) => {
-              acc[keyword] = (acc[keyword] || 0) + 1;
-              return acc;
-            },
-            { ...prevCounts },
-          ),
-        );
+        setSessionCounts((prevCounts) => {
+          const updatedCounts = { ...prevCounts };
+          matches.forEach((keyword) => {
+            updatedCounts[keyword.toLowerCase()] = (updatedCounts[keyword.toLowerCase()] || 0) + 1;
+          });
+          return updatedCounts;
+        });
 
         setCumulativeCounts((prevCounts) =>
           matches.reduce(

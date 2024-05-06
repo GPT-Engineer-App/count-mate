@@ -12,11 +12,24 @@ const Index = () => {
   console.log("Session Counts State:", sessionCounts);
   const [cumulativeCounts, setCumulativeCounts] = useState(() => {
     const savedCounts = localStorage.getItem("cumulativeTally");
-    return savedCounts ? JSON.parse(savedCounts) : { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 };
+    if (savedCounts) {
+      try {
+        return JSON.parse(savedCounts);
+      } catch (e) {
+        console.error("Error parsing cumulativeTally from localStorage:", e);
+        return { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 };
+      }
+    } else {
+      return { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 };
+    }
   });
 
   useEffect(() => {
-    localStorage.setItem("cumulativeTally", JSON.stringify(cumulativeCounts));
+    try {
+      localStorage.setItem("cumulativeTally", JSON.stringify(cumulativeCounts));
+    } catch (e) {
+      console.error("Error saving cumulativeTally to localStorage:", e);
+    }
   }, [cumulativeCounts]);
   console.log("Cumulative Counts State:", cumulativeCounts);
   const [isRecording, setIsRecording] = useState(false);

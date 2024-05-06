@@ -11,7 +11,7 @@ const Index = () => {
   console.log("Recognition State:", recognition);
   const [counts, setCounts] = useState(() => {
     const savedCounts = localStorage.getItem("cumulativeTally");
-    return savedCounts ? JSON.parse(savedCounts) : { PET: 0, HDP: 0, Can: 0, Glass: 0, Carton: 0 };
+    return savedCounts ? JSON.parse(savedCounts) : { pet: 0, hdp: 0, can: 0, glass: 0, carton: 0 };
   });
   const sessionCounts = counts;
   console.log("Counts State:", counts);

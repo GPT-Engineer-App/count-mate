@@ -11,10 +11,10 @@ const useSpeechRecognition = () => {
     recognitionInstance.grammars = speechRecognitionList;
     return recognitionInstance;
   });
-  const [sessionCounts, setSessionCounts] = useState({ PET: 0, HDP: 0, CAN: 0, GLASS: 0, CARTON: 0 });
+  const [sessionCounts, setSessionCounts] = useState({ pet: 0, hdp: 0, can: 0, glass: 0, carton: 0 });
   const [cumulativeCounts, setCumulativeCounts] = useState(() => {
     const savedCounts = localStorage.getItem("cumulativeTally");
-    return savedCounts ? JSON.parse(savedCounts) : { PET: 0, HDP: 0, CAN: 0, GLASS: 0, CARTON: 0 };
+    return savedCounts ? JSON.parse(savedCounts) : { pet: 0, hdp: 0, can: 0, glass: 0, carton: 0 };
   });
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");

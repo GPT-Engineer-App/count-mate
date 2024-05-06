@@ -51,21 +51,7 @@ const Index = () => {
     }
   };
 
-  const handleResult = (event) => {
-    const lastResult = event.results[event.resultIndex];
-    if (lastResult.isFinal) {
-      const transcript = lastResult[0].transcript.trim().toLowerCase();
-      console.log("Final transcript:", transcript);
-      const detectedCounts = detectKeywordsCustom(transcript);
-      setCounts((prevCounts) => {
-        const updatedCounts = { ...prevCounts };
-        Object.keys(detectedCounts).forEach((key) => {
-          updatedCounts[key] = (updatedCounts[key] || 0) + detectedCounts[key];
-        });
-        return updatedCounts;
-      });
-    }
-  };
+  // This function is now handled in the useSpeechRecognition hook and updates are directly made to sessionCounts
 
   const handleError = (event) => {
     console.error("Speech Recognition Error:", event.error);

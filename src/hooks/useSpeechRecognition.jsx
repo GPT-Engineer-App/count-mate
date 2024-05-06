@@ -18,6 +18,16 @@ const useSpeechRecognition = () => {
   });
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
+
+  const detectKeywordsCustom = (transcript) => {
+    const keywords = ["pet", "hdp", "can", "glass", "carton"];
+    const counts = {};
+    const words = transcript.toLowerCase().split(/\s+/);
+    keywords.forEach((keyword) => {
+      counts[keyword] = words.filter((word) => word === keyword).length;
+    });
+    return counts;
+  };
   const toast = useToast();
 
   const startRecording = () => {
@@ -79,7 +89,14 @@ const useSpeechRecognition = () => {
         .join("");
       setTranscript(transcript);
       console.log("Transcript received:", transcript);
-      console.log("Transcript:", transcript);
+      const detectedCounts = detectKeywordsCustom(transcript);
+      setSessionCounts((prevCounts) => {
+        const updatedCounts = { ...prevCounts };
+        Object.keys(detectedCounts).forEach((key) => {
+          updatedCounts[key.toUpperCase()] = (updatedCounts[key.toUpperCase()] || 0) + detectedCounts[key];
+        });
+        return updatedCounts;
+      });
     };
     recognition.onerror = function (event) {
       console.error("Recognition error:", event.error);

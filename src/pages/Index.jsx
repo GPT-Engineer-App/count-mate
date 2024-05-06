@@ -152,11 +152,30 @@ const Index = () => {
     document.body.removeChild(link);
   };
 
+  const installPWA = () => {
+    let deferredPrompt;
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === "accepted") {
+          console.log("User accepted the A2HS prompt");
+        } else {
+          console.log("User dismissed the A2HS prompt");
+        }
+        deferredPrompt = null;
+      });
+    });
+  };
+
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
+      <CountDisplay sessionCounts={sessionCounts} />
       <Button onClick={startRecording} colorScheme={isRecording ? "orange" : "green"} leftIcon={<FaMicrophone />}>
         {isRecording ? "Pause Recording" : "Start Recording"}
       </Button>
+      <CountDisplay cumulativeCounts={cumulativeCounts} />
       <Button onClick={resetSessionCounts} colorScheme="yellow">
         Reset Session Counts
       </Button>
@@ -166,7 +185,9 @@ const Index = () => {
       <Button onClick={handleDownloadCSV} colorScheme="blue">
         Download CSV
       </Button>
-      <CountDisplay sessionCounts={sessionCounts} cumulativeCounts={cumulativeCounts} />
+      <Button onClick={installPWA} colorScheme="purple">
+        Install App
+      </Button>
     </VStack>
   );
 };

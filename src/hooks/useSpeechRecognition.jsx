@@ -45,6 +45,16 @@ const useSpeechRecognition = () => {
 
     recognition.addEventListener("audiostart", handleAudioStart);
     recognition.addEventListener("audioend", handleAudioEnd);
+    recognition.onresult = function (event) {
+      const transcript = Array.from(event.results)
+        .map((result) => result[0])
+        .map((result) => result.transcript)
+        .join("");
+      console.log("Transcript:", transcript);
+    };
+    recognition.onerror = function (event) {
+      console.error("Recognition error:", event.error);
+    };
 
     return () => {
       if (recognition) {

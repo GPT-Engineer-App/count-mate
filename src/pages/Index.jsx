@@ -234,8 +234,8 @@ const Index = () => {
       </VStack>
       <>
         <HStack width="100%" justify="center">
-          <CountDisplay counts={sessionCounts} title="Session Counts" style={{ transform: isOpen ? "translateY(-100%)" : "translateY(0)", transition: "transform 0.5s" }} />
-          <CountDisplay counts={cumulativeCounts} title="Cumulative Counts" style={{ transform: isOpen ? "translateY(100%)" : "translateY(0)", transition: "transform 0.5s" }} />
+          <CountDisplay counts={sessionCounts} title="Session Counts" style={{ transform: isOpen ? "translateY(-50%)" : "translateY(0)", transition: "transform 0.5s" }} />
+          <CountDisplay counts={cumulativeCounts} title="Cumulative Counts" style={{ transform: isOpen ? "translateY(50%)" : "translateY(0)", transition: "transform 0.5s" }} />
         </HStack>
         <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" zIndex="overlay">
           <Settings />

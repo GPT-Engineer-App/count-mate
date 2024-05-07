@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useReducer } from "react";
-import { VStack, HStack, Button, useToast, StackDivider, Box, Heading, Text } from "@chakra-ui/react";
+import { VStack, HStack, Button, useToast, StackDivider, Box, Heading, Text, Spacer } from "@chakra-ui/react";
 import { FaMicrophone } from "react-icons/fa";
 import useSpeechRecognition from "../hooks/useSpeechRecognition";
 import CountDisplay from "../components/CountDisplay";
@@ -216,24 +216,20 @@ const Index = () => {
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <CountDisplay counts={counts} title="Total Counts" />
-      <HStack justify="center" align="center">
-        <Button colorScheme="blue" onClick={() => setCounts((prev) => ({ ...prev, pet: prev.pet + 1 }))}>
-          +
-        </Button>
-        <CountDisplay counts={counts} title="Total Counts" />
-        <Button colorScheme="red" onClick={() => setCounts((prev) => ({ ...prev, pet: prev.pet - 1 }))}>
-          -
-        </Button>
-      </HStack>
-      <HStack>
-        <Button colorScheme="green" onClick={startRecording}>
-          Start
-        </Button>
-        <Button colorScheme="red" onClick={stopRecording}>
-          Stop
-        </Button>
-      </HStack>
+      <CountDisplay counts={counts} title="Audio Stream Keyword Detection">
+        {Object.keys(counts).map((key) => (
+          <HStack key={key}>
+            <Button colorScheme="blue" onClick={() => setCounts((prev) => ({ ...prev, [key]: prev[key] + 1 }))}>
+              Tap
+            </Button>
+            <Button colorScheme="blue" onClick={() => setCounts((prev) => ({ ...prev, [key]: prev[key] + 2 }))}>
+              Double Tap
+            </Button>
+          </HStack>
+        ))}
+      </CountDisplay>
+      <Spacer height="20vh" /> {}
+      <CountDisplay counts={counts} title="Statistics" />
       <HStack justify="space-between" width="full">
         <Button colorScheme="blue" onClick={resetCounts}>
           Reset

@@ -44,13 +44,29 @@ const useSpeechRecognition = () => {
   const [counter, setCounter] = useState(0);
 
   const detectKeywordsCustom = (transcript) => {
-    const keywords = ["pet", "high-density polyethylene", "can", "glass", "carton"];
-    const counts = {};
+    const keywords = ["pet", "hdp", "can", "glass", "carton"];
     const words = transcript.toLowerCase().split(/\s+/);
-    keywords.forEach((keyword) => {
-      counts[keyword.toUpperCase()] = words.filter((word) => word === keyword).length;
-    });
-    return counts;
+    let currentCount = 1;
+    const updatedCounts = { ...sessionCounts };
+
+    for (const word of words) {
+      if (keywords.includes(word)) {
+        updatedCounts[word] = (updatedCounts[word] || 0) + currentCount;
+        currentCount = 1;
+        toast({
+          title: "Keyword Detected",
+          description: `Counted ${currentCount} ${word.toUpperCase()}`,
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+      } else if (!isNaN(parseInt(word))) {
+        currentCount = parseInt(word);
+      }
+    }
+
+    setSessionCounts(updatedCounts);
+    return updatedCounts;
   };
   const toast = useToast();
 

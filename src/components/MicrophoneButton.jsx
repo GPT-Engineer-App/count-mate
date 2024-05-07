@@ -7,8 +7,8 @@ const MicrophoneButton = () => {
   const { isRecording, startRecording, stopRecording } = useSpeechRecognition();
 
   return (
-    <Button onClick={isRecording ? stopRecording : startRecording} colorScheme={isRecording ? "red" : "green"} leftIcon={<FaMicrophone />}>
-      {isRecording ? "Stop Recording" : "Start Recording"}
+    <Button onClick={isRecording ? stopRecording : startRecording} colorScheme={isRecording ? "red" : "green"} leftIcon={<FaMicrophone color={isRecording ? "red" : "green"} />}>
+      {isRecording ? "Stop" : "Start"}
     </Button>
   );
 };

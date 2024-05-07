@@ -216,14 +216,14 @@ const Index = () => {
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <CountDisplay counts={counts} title="Audio Stream Keyword Detection">
+      <CountDisplay counts={counts} title="Current Session Counts">
         {Object.keys(counts).map((key) => (
-          <HStack key={key}>
+          <HStack key={key} spacing={2}>
             <Button colorScheme="blue" onClick={() => setCounts((prev) => ({ ...prev, [key]: prev[key] + 1 }))}>
-              Tap
+              Increment
             </Button>
             <Button colorScheme="blue" onClick={() => setCounts((prev) => ({ ...prev, [key]: prev[key] + 2 }))}>
-              Double Tap
+              Increment x2
             </Button>
           </HStack>
         ))}

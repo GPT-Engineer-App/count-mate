@@ -2,23 +2,14 @@ import { useState, useEffect } from "react";
 import { useToast } from "@chakra-ui/react";
 
 const useSpeechRecognition = () => {
-  const [recognition, setRecognition] = useState(() => {
+  const [recognition] = useState(() => {
     const recognitionInstance = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognitionInstance.lang = "en-US";
     recognitionInstance.continuous = true;
     recognitionInstance.interimResults = true;
-    recognitionInstance.continuous = true;
-    recognitionInstance.interimResults = true;
-    recognitionInstance.maxAlternatives = 10;
+    recognitionInstance.maxAlternatives = 1;
     recognitionInstance.grammars = new window.SpeechGrammarList();
     recognitionInstance.grammars.addFromString("#JSGF V1.0; grammar items; public <item> = pet | hdp | can | glass | carton ;", 1);
-    recognitionInstance.onresult = (event) => {
-      const transcript = Array.from(event.results)
-        .map((result) => result[0])
-        .map((result) => result.transcript)
-        .join("");
-      setTranscript(transcript);
-    };
     return recognitionInstance;
   });
   const [sessionCounts, setSessionCounts] = useState({ PET: 0, HDP: 0, CAN: 0, GLASS: 0, CARTON: 0 });

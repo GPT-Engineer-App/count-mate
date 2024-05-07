@@ -228,8 +228,6 @@ const Index = () => {
           </HStack>
         ))}
       </CountDisplay>
-      <Spacer height="20vh" /> {}
-      <CountDisplay counts={counts} title="Statistics" />
       <HStack justify="space-between" width="full" mb={4} align="center" justify="center">
         <Button colorScheme="green" onClick={startRecording}>
           Start
@@ -240,8 +238,6 @@ const Index = () => {
         <Button colorScheme="red" onClick={stopRecording} isDisabled={!isRecording}>
           Stop
         </Button>
-      </HStack>
-      <HStack justify="space-between" width="full" align="center" justify="center">
         <Button colorScheme="blue" onClick={resetCounts}>
           Reset
         </Button>
@@ -249,6 +245,8 @@ const Index = () => {
           Download CSV
         </Button>
       </HStack>
+      <Spacer height="20vh" /> {}
+      <CountDisplay counts={counts} title="Statistics" />
     </VStack>
   );
 };

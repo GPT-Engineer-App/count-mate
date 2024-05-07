@@ -216,23 +216,32 @@ const Index = () => {
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <HStack width="full" justify="space-between">
-        <Button colorScheme={isRecording ? "red" : "green"} onClick={isRecording ? stopRecording : startRecording} width="50%">
-          {isRecording ? "Stop Recording" : "Start Recording"}
+      <CountDisplay counts={counts} title="Total Counts" />
+      <HStack>
+        <Button colorScheme="blue" onClick={() => setCounts((prev) => ({ ...prev, pet: prev.pet + 1 }))}>
+          +
         </Button>
-        <Button colorScheme="orange" onClick={pauseRecording} isDisabled={!isRecording} width="50%">
-          Pause Recording
+        <Text>{counts.pet}</Text>
+        <Button colorScheme="red" onClick={() => setCounts((prev) => ({ ...prev, pet: prev.pet - 1 }))}>
+          -
         </Button>
       </HStack>
-      <CountDisplay counts={sessionCounts} title="Session Counts" />
-      <CountDisplay counts={cumulativeCounts} title="Cumulative Counts" />
-      <Box>
-        <Text>Total Counts: {Object.values(sessionCounts).reduce((total, num) => total + num, 0)}</Text>
-        <Text>Average Count per Minute: {calculateAverageCountPerMinute(sessionCounts)}</Text>
-      </Box>
-      <Button colorScheme="blue" onClick={handleDownloadCSV} isDisabled={Object.values(cumulativeCounts).every((count) => count === 0)}>
-        Download CSV
-      </Button>
+      <HStack>
+        <Button colorScheme="green" onClick={startRecording}>
+          Start
+        </Button>
+        <Button colorScheme="red" onClick={stopRecording}>
+          Stop
+        </Button>
+      </HStack>
+      <HStack justify="space-between" width="full">
+        <Button colorScheme="blue" onClick={resetCounts}>
+          Reset
+        </Button>
+        <Button colorScheme="blue" onClick={handleDownloadCSV}>
+          Download CSV
+        </Button>
+      </HStack>
     </VStack>
   );
 };

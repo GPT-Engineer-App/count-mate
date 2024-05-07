@@ -35,7 +35,7 @@ const Index = () => {
     }
   }, [counts]);
   console.log("Counts State:", counts);
-  const { isOpen, onToggle } = useDisclosure();
+  const [isOpen, setIsOpen] = useState(false);
   const [isRecording, setIsRecording] = useReducer((state) => !state, false);
   console.log("Is Recording State:", isRecording);
   const toast = useToast();
@@ -215,48 +215,15 @@ const Index = () => {
     };
   };
 
+  
+  const toggleOpen = () => setIsOpen(!isOpen);
+
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <CountDisplay counts={counts} title="Current Session Counts">
-        {Object.keys(counts).map((key) => (
-          <HStack key={key} spacing={2}>
-            <Button colorScheme="blue" onClick={() => setCounts((prev) => ({ ...prev, [key]: prev[key] + 1 }))}>
-              Increment
-            </Button>
-            <Button colorScheme="blue" onClick={() => setCounts((prev) => ({ ...prev, [key]: prev[key] + 2 }))}>
-              Increment x2
-            </Button>
-          </HStack>
-        ))}
-      </CountDisplay>
-      <HStack justify="space-between" width="full" mb={4} align="center" justify="center">
-        <Button colorScheme="green" onClick={startRecording}>
-          Start
-        </Button>
-        <Button colorScheme="yellow" onClick={pauseRecording} isDisabled={!isRecording}>
-          Pause
-        </Button>
-        <Button colorScheme="red" onClick={stopRecording} isDisabled={!isRecording}>
-          Stop
-        </Button>
-        <Button colorScheme="blue" onClick={resetCounts}>
-          Reset
-        </Button>
-        <Button colorScheme="blue" onClick={handleDownloadCSV}>
-          Download CSV
-        </Button>
-      </HStack>
-      <Box>
-        {" "}
-        {}
-        <Button onClick={onToggle}>Settings</Button> {}
-        {isOpen && (
-          <VStack pos="absolute" top="100%" left="0" bg="gray.800" p={4} rounded="md" shadow="md">
-            {}
-          </VStack>
-        )}
-      </Box>
-      <CountDisplay counts={counts} title="Statistics" />
+      <Button onClick={toggleOpen} colorScheme="blue">
+        {isOpen ? "Close Settings" : "Open Settings"}
+      </Button>
+      <Box style={{ width: "100%", height: "200px", backgroundColor: isOpen ? "gray.200" : "gray.800", transition: "all 0.5s ease-in-out" }}>{isOpen && <VStack>{}</VStack>}</Box>
     </VStack>
   );
 };

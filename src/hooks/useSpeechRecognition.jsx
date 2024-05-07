@@ -13,13 +13,11 @@ const useSpeechRecognition = () => {
     recognitionInstance.grammars = new window.SpeechGrammarList();
     recognitionInstance.grammars.addFromString("#JSGF V1.0; grammar items; public <item> = pet | hdp | can | glass | carton ;", 1);
     recognitionInstance.onresult = (event) => {
-      setTimeout(() => {
-        const transcript = Array.from(event.results)
-          .map((result) => result[0])
-          .map((result) => result.transcript)
-          .join("");
-        setTranscript(transcript);
-      }, 500);
+      const transcript = Array.from(event.results)
+        .map((result) => result[0])
+        .map((result) => result.transcript)
+        .join("");
+      setTranscript(transcript);
     };
     return recognitionInstance;
   });

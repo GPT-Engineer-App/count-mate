@@ -217,11 +217,11 @@ const Index = () => {
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
       <CountDisplay counts={counts} title="Total Counts" />
-      <HStack>
+      <HStack justify="center" align="center">
         <Button colorScheme="blue" onClick={() => setCounts((prev) => ({ ...prev, pet: prev.pet + 1 }))}>
           +
         </Button>
-        <Text>{counts.pet}</Text>
+        <CountDisplay counts={counts} title="Total Counts" />
         <Button colorScheme="red" onClick={() => setCounts((prev) => ({ ...prev, pet: prev.pet - 1 }))}>
           -
         </Button>

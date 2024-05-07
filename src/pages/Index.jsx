@@ -227,14 +227,14 @@ const Index = () => {
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <VStack position="fixed" left="0" height="100vh" spacing={2}>
+      <VStack position="fixed" right="0" height="100vh" spacing={2}>
         <Button onClick={toggleOpen} colorScheme="blue">
           {isOpen ? "Close" : "Open"}
         </Button>
       </VStack>
       <HStack width="100%" justify="center">
-        <CountDisplay counts={sessionCounts} title="Session Counts" style={{ transform: isOpen ? "rotateY(180deg)" : "rotateY(0)", transition: "transform 0.5s" }} />
-        <CountDisplay counts={cumulativeCounts} title="Cumulative Counts" style={{ transform: isOpen ? "rotateY(-180deg)" : "rotateY(0)", transition: "transform 0.5s" }} />
+        <CountDisplay counts={sessionCounts} title="Session Counts" style={{ transform: isOpen ? "translateX(-50%)" : "translateX(0)", transition: "transform 0.5s" }} />
+        <CountDisplay counts={cumulativeCounts} title="Cumulative Counts" style={{ transform: isOpen ? "translateX(50%)" : "translateX(0)", transition: "transform 0.5s" }} />
       </HStack>
       {isOpen && (
         <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" zIndex="overlay">

@@ -7,6 +7,8 @@ const useSpeechRecognition = () => {
     recognitionInstance.lang = "en-US";
     recognitionInstance.continuous = true;
     recognitionInstance.interimResults = true;
+    recognitionInstance.continuous = true;
+    recognitionInstance.interimResults = true;
     recognitionInstance.maxAlternatives = 10;
     recognitionInstance.grammars = new window.SpeechGrammarList();
     recognitionInstance.grammars.addFromString("#JSGF V1.0; grammar items; public <item> = pet | hdp | can | glass | carton ;", 1);

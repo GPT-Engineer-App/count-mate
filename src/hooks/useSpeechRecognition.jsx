@@ -70,6 +70,7 @@ const useSpeechRecognition = () => {
       recognition.start();
       setIsRecording(true);
       console.log("Recording started.");
+      new Audio("/start-beep.mp3").play();
     }
   };
 
@@ -94,6 +95,7 @@ const useSpeechRecognition = () => {
       recognition.stop();
       setIsRecording(false);
       console.log("Recording stopped.");
+      new Audio("/stop-beep.mp3").play();
     }
   };
 
@@ -128,6 +130,13 @@ const useSpeechRecognition = () => {
         if (detectedKeywords[key] > 0) {
           const newCount = sessionCounts[key] + detectedKeywords[key];
           setSessionCounts((prevCounts) => ({ ...prevCounts, [key]: newCount }));
+          toast({
+            title: "Keyword Detected",
+            description: `${key} detected ${detectedKeywords[key]} times`,
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
           toast({
             title: "Keyword Detected",
             description: `${key} detected ${detectedKeywords[key]} times`,

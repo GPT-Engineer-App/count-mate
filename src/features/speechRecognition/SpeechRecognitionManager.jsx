@@ -8,10 +8,13 @@ const SpeechRecognitionInterface = () => {
 
   return (
     <>
+      {}
       <MicrophoneButton isRecording={isRecording} startRecording={startRecording} stopRecording={stopRecording} />
+      {}
       <Text mt={4} bg={isRecording ? "green.100" : "transparent"}>
         {transcript}
       </Text>
+      {}
       <Button mt={2} colorScheme="blue" onClick={() => setTranscript("")}>
         Accept
       </Button>

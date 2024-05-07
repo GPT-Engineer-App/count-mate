@@ -52,7 +52,6 @@ const useSpeechRecognition = () => {
     for (const word of words) {
       if (keywords.includes(word)) {
         updatedCounts[word] = (updatedCounts[word] || 0) + currentCount;
-        currentCount = 1;
         toast({
           title: "Keyword Detected",
           description: `Counted ${currentCount} ${word.toUpperCase()}`,
@@ -60,6 +59,7 @@ const useSpeechRecognition = () => {
           duration: 2000,
           isClosable: true,
         });
+        currentCount = 1;
       } else if (!isNaN(parseInt(word))) {
         currentCount = parseInt(word);
       }

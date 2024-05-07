@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import Settings from "./pages/Settings";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 function App() {
@@ -20,6 +21,14 @@ function App() {
           element={
             <ErrorBoundary>
               <Login />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ErrorBoundary>
+              <Settings />
             </ErrorBoundary>
           }
         />

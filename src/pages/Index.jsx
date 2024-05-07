@@ -246,11 +246,16 @@ const Index = () => {
           Download CSV
         </Button>
       </HStack>
-      <Button onClick={onToggle}>Settings</Button>
-      <Collapse in={isOpen} animateOpacity>
-        <VStack>{}</VStack>
-      </Collapse>
-      <Spacer height="20vh" /> {}
+      <Box>
+        {" "}
+        {}
+        <Button onClick={onToggle}>Settings</Button> {}
+        {isOpen && (
+          <VStack pos="absolute" top="100%" left="0" bg="gray.800" p={4} rounded="md" shadow="md">
+            {}
+          </VStack>
+        )}
+      </Box>
       <CountDisplay counts={counts} title="Statistics" />
     </VStack>
   );

@@ -215,15 +215,24 @@ const Index = () => {
     };
   };
 
-  
   const toggleOpen = () => setIsOpen(!isOpen);
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <Button onClick={toggleOpen} colorScheme="blue">
-        {isOpen ? "Close Settings" : "Open Settings"}
-      </Button>
-      <Box style={{ width: "100%", height: "200px", backgroundColor: isOpen ? "gray.200" : "gray.800", transition: "all 0.5s ease-in-out" }}>{isOpen && <VStack>{}</VStack>}</Box>
+      <VStack position="fixed" left="0" height="100vh" spacing={2}>
+        <Button onClick={toggleOpen} colorScheme="blue">
+          {isOpen ? "Close" : "Open"}
+        </Button>
+      </VStack>
+      <HStack width="100%" justify="center">
+        <CountDisplay counts={sessionCounts} title="Session Counts" style={{ transform: isOpen ? "rotateY(180deg)" : "rotateY(0)", transition: "transform 0.5s" }} />
+        <CountDisplay counts={cumulativeCounts} title="Cumulative Counts" style={{ transform: isOpen ? "rotateY(-180deg)" : "rotateY(0)", transition: "transform 0.5s" }} />
+      </HStack>
+      {isOpen && (
+        <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" zIndex="overlay">
+          {}
+        </Box>
+      )}
     </VStack>
   );
 };

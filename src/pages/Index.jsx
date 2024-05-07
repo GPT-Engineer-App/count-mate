@@ -43,7 +43,7 @@ const Index = () => {
     }
   }, [counts]);
   console.log("Counts State:", counts);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [isRecording, setIsRecording] = useReducer((state) => !state, false);
   console.log("Is Recording State:", isRecording);
   const toast = useToast();
@@ -232,21 +232,15 @@ const Index = () => {
           {isOpen ? "Close" : "Open"}
         </Button>
       </VStack>
-      {isOpen ? (
-        <>
-          <HStack width="100%" justify="center">
-            <CountDisplay counts={sessionCounts} title="Session Counts" style={{ transform: "translateY(-50%)", transition: "transform 0.5s" }} />
-            <CountDisplay counts={cumulativeCounts} title="Cumulative Counts" style={{ transform: "translateY(50%)", transition: "transform 0.5s" }} />
-          </HStack>
-          <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" zIndex="overlay">
-            <Settings />
-          </Box>
-        </>
-      ) : (
+      <>
         <HStack width="100%" justify="center">
-          <CountDisplay counts={{ ...sessionCounts, ...cumulativeCounts }} title="Closed Box" />
+          <CountDisplay counts={sessionCounts} title="Session Counts" style={{ transform: isOpen ? "translateY(-50%)" : "translateY(0)", transition: "transform 0.5s" }} />
+          <CountDisplay counts={cumulativeCounts} title="Cumulative Counts" style={{ transform: isOpen ? "translateY(50%)" : "translateY(0)", transition: "transform 0.5s" }} />
         </HStack>
-      )}
+        <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" zIndex="overlay">
+          <Settings />
+        </Box>
+      </>
       <Button onClick={() => setIsOpen(false)} colorScheme="red" position="fixed" bottom="20px" right="20px">
         Close Box
       </Button>

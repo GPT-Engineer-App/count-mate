@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useReducer } from "react";
-import { VStack, HStack, Button, useToast, StackDivider, Box, Heading, Text, Spacer } from "@chakra-ui/react";
+import { VStack, HStack, Button, useToast, StackDivider, Box, Heading, Text, Spacer, Collapse, useDisclosure } from "@chakra-ui/react";
 import { FaMicrophone } from "react-icons/fa";
 import useSpeechRecognition from "../hooks/useSpeechRecognition";
 import CountDisplay from "../components/CountDisplay";
@@ -35,6 +35,7 @@ const Index = () => {
     }
   }, [counts]);
   console.log("Counts State:", counts);
+  const { isOpen, onToggle } = useDisclosure();
   const [isRecording, setIsRecording] = useReducer((state) => !state, false);
   console.log("Is Recording State:", isRecording);
   const toast = useToast();
@@ -245,6 +246,10 @@ const Index = () => {
           Download CSV
         </Button>
       </HStack>
+      <Button onClick={onToggle}>Settings</Button>
+      <Collapse in={isOpen} animateOpacity>
+        <VStack>{}</VStack>
+      </Collapse>
       <Spacer height="20vh" /> {}
       <CountDisplay counts={counts} title="Statistics" />
     </VStack>

@@ -1,70 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { useSpeechRecognition } from "../hooks/useSpeechRecognition";
-import { Box, Button, useToast } from "@chakra-ui/react";
-import { FaMicrophone } from "react-icons/fa";
+import React from "react";
+import { Text, Button } from "@chakra-ui/react";
+import MicrophoneButton from "./MicrophoneButton";
+import useSpeechRecognition from "../hooks/useSpeechRecognition";
 
-const SpeechRecognitionManager = () => {
-  const { recognition, isRecording, startRecording, stopRecording, transcript, setTranscript } = useSpeechRecognition();
-  const [volume, setVolume] = useState(0);
-  const [keywordCounts, setKeywordCounts] = useState({});
-
-  useEffect(() => {
-    const keywords = ["example", "test", "keyword"];
-    const counts = keywords.reduce((acc, keyword) => {
-      const count = (transcript.match(new RegExp(keyword, "gi")) || []).length;
-      if (count > 0) {
-        acc[keyword] = count;
-      }
-      return acc;
-    }, {});
-    setKeywordCounts(counts);
-  }, [transcript]);
-  const toast = useToast();
-
-  useEffect(() => {
-    if (!recognition) {
-      toast({
-        title: "Unsupported Feature",
-        description: "Speech recognition is not supported by your browser.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  }, [recognition, toast]);
+const SpeechRecognitionInterface = () => {
+  const { transcript, setTranscript, startRecording, stopRecording, isRecording } = useSpeechRecognition();
 
   return (
     <>
-      <Button onClick={isRecording ? stopRecording : startRecording} colorScheme={isRecording ? "red" : "green"} leftIcon={<FaMicrophone />}>
-        {isRecording ? "Stop Recording" : "Start Recording"}
-      </Button>
-      <Text mt={4}>{transcript}</Text>
+      <MicrophoneButton isRecording={isRecording} startRecording={startRecording} stopRecording={stopRecording} />
+      <Text mt={4} bg={isRecording ? "green.100" : "transparent"}>
+        {transcript}
+      </Text>
       <Button mt={2} colorScheme="blue" onClick={() => setTranscript("")}>
         Accept
       </Button>
-      <Box position="relative" w="full" h="10px" bg="gray.200">
-        <Box position="absolute" w={`${volume * 100}%`} h="full" bg="green.400" />
-      </Box>
-      <Button mt={2} colorScheme="red" onClick={() => setTranscript("")}>
-        Correct
+      <Text mt={4}>{transcript}</Text>
+      <Button mt={2} colorScheme="blue" onClick={() => setTranscript("")} isDisabled={!transcript}>
+        Accept
       </Button>
-      <Box mt={4}>
-        {Object.entries(keywordCounts).map(([key, count]) => (
-          <Text key={key}>{`${key}: ${count}`}</Text>
-        ))}
-      </Box>
-      <Button
-        mt={2}
-        colorScheme="blue"
-        onClick={() => {
-          setTranscript("");
-          recognition.resetSessionCounts();
-        }}
-      >
-        Reset
+      <Button mt={2} colorScheme="red" onClick={() => setTranscript("")} isDisabled={!transcript}>
+        Correct
       </Button>
     </>
   );
 };
 
-export default SpeechRecognitionManager;
+export default SpeechRecognitionInterface;

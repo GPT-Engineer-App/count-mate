@@ -1,11 +1,14 @@
 import React from "react";
 import { Button } from "@chakra-ui/react";
-import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
+import { FaMicrophone } from "react-icons/fa";
+import useSpeechRecognition from "../hooks/useSpeechRecognition";
 
-const MicrophoneButton = ({ isRecording }) => {
+const MicrophoneButton = () => {
+  const { isRecording, startRecording, stopRecording } = useSpeechRecognition();
+
   return (
-    <Button colorScheme={isRecording ? "red" : "green"} leftIcon={isRecording ? <FaMicrophoneSlash /> : <FaMicrophone />}>
-      {isRecording ? "Microphone In Use" : "Microphone Not In Use"}
+    <Button onClick={isRecording ? stopRecording : startRecording} colorScheme={isRecording ? "red" : "green"} leftIcon={<FaMicrophone />}>
+      {isRecording ? "Stop Recording" : "Start Recording"}
     </Button>
   );
 };

@@ -5,6 +5,14 @@ import useSpeechRecognition from "../hooks/useSpeechRecognition";
 import CountDisplay from "../components/CountDisplay";
 import MicrophoneButton from "../components/MicrophoneButton";
 
+const Settings = () => {
+  return (
+    <Box p={4} borderWidth="1px" borderRadius="lg">
+      <Text>Settings Panel</Text>
+    </Box>
+  );
+};
+
 const Index = () => {
   console.log("Index component rendering");
   const recognition = useMemo(() => new (window.SpeechRecognition || window.webkitSpeechRecognition)(), []);
@@ -230,7 +238,7 @@ const Index = () => {
       </HStack>
       {isOpen && (
         <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" zIndex="overlay">
-          {}
+          <Settings />
         </Box>
       )}
     </VStack>

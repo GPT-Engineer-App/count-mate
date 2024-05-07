@@ -9,12 +9,14 @@ const CountDisplay = ({ counts = {}, title }) => {
           {title}
         </Text>
       )}
-      <Grid templateColumns="repeat(2, 1fr)" gap={2}>
+      <Grid templateColumns={`repeat(${Object.keys(counts).length}, 1fr)`} textAlign="center" gap={4}>
         {Object.keys(counts).map((key) => (
-          <React.Fragment key={key}>
-            <Text fontWeight="bold">{key.toUpperCase()}:</Text>
-            <Text>{counts[key]}</Text>
-          </React.Fragment>
+          <Box key={key}>
+            <Text fontSize="lg" fontWeight="bold">
+              {key.toUpperCase()}
+            </Text>
+            <Text fontSize="md">{counts[key]}</Text>
+          </Box>
         ))}
       </Grid>
     </Box>

@@ -230,6 +230,17 @@ const Index = () => {
       </CountDisplay>
       <Spacer height="20vh" /> {}
       <CountDisplay counts={counts} title="Statistics" />
+      <HStack justify="space-between" width="full" mb={4}>
+        <Button colorScheme="green" onClick={startRecording}>
+          Start
+        </Button>
+        <Button colorScheme="yellow" onClick={pauseRecording} isDisabled={!isRecording}>
+          Pause
+        </Button>
+        <Button colorScheme="red" onClick={stopRecording} isDisabled={!isRecording}>
+          Stop
+        </Button>
+      </HStack>
       <HStack justify="space-between" width="full">
         <Button colorScheme="blue" onClick={resetCounts}>
           Reset

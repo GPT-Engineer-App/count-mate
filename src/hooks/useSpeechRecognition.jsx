@@ -30,6 +30,28 @@ const useSpeechRecognition = () => {
   });
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
+  const [keywordCounts, setKeywordCounts] = useState({ PET: 0, HDP: 0, CAN: 0, GLASS: 0, CARTON: 0 });
+
+  const countKeywords = (transcript) => {
+    const keywords = ["pet", "hdp", "can", "glass", "carton"];
+    const words = transcript.toLowerCase().split(/\s+/);
+    const counts = {};
+    keywords.forEach((keyword) => {
+      counts[keyword.toUpperCase()] = (counts[keyword.toUpperCase()] || 0) + words.filter((word) => word === keyword).length;
+    });
+    return counts;
+  };
+
+  useEffect(() => {
+    const newCounts = countKeywords(transcript);
+    setKeywordCounts((prevCounts) => {
+      const updatedCounts = { ...prevCounts };
+      Object.keys(newCounts).forEach((key) => {
+        updatedCounts[key] += newCounts[key];
+      });
+      return updatedCounts;
+    });
+  }, [transcript]);
   const [counter, setCounter] = useState(0);
 
   const detectKeywordsCustom = (transcript) => {

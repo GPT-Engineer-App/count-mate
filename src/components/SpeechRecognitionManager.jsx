@@ -6,6 +6,19 @@ import { FaMicrophone } from "react-icons/fa";
 const SpeechRecognitionManager = () => {
   const { recognition, isRecording, startRecording, stopRecording, transcript, setTranscript } = useSpeechRecognition();
   const [volume, setVolume] = useState(0);
+  const [keywordCounts, setKeywordCounts] = useState({});
+
+  useEffect(() => {
+    const keywords = ["example", "test", "keyword"];
+    const counts = keywords.reduce((acc, keyword) => {
+      const count = (transcript.match(new RegExp(keyword, "gi")) || []).length;
+      if (count > 0) {
+        acc[keyword] = count;
+      }
+      return acc;
+    }, {});
+    setKeywordCounts(counts);
+  }, [transcript]);
   const toast = useToast();
 
   useEffect(() => {
@@ -35,6 +48,11 @@ const SpeechRecognitionManager = () => {
       <Button mt={2} colorScheme="red" onClick={() => setTranscript("")}>
         Correct
       </Button>
+      <Box mt={4}>
+        {Object.entries(keywordCounts).map(([key, count]) => (
+          <Text key={key}>{`${key}: ${count}`}</Text>
+        ))}
+      </Box>
       <Button
         mt={2}
         colorScheme="blue"

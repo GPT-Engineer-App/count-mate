@@ -41,7 +41,7 @@ function App() {
             }
           />
         </Routes>
-        <button onClick={toggleSettings} style={{ position: "fixed", bottom: 20, right: 20 }}>
+        <button onClick={toggleSettings} style={{ position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}>
           {isSettingsOpen ? "Close Settings" : "Open Settings"}
         </button>
         {isSettingsOpen && (

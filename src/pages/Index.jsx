@@ -227,22 +227,23 @@ const Index = () => {
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <VStack spacing={4} align="center" justify="center" height="100vh">
-        <HStack width="100%" justify="center">
-          <CountDisplay counts={sessionCounts} title="Session Counts" />
-          <CountDisplay counts={cumulativeCounts} title="Cumulative Counts" />
-        </HStack>
-        <Box position="fixed" bottom="20px" right="20px">
-          <Button onClick={toggleOpen} colorScheme="blue">
-            {isOpen ? "Close" : "Open"}
-          </Button>
-        </Box>
-        {isOpen && (
-          <Box position="fixed" bottom="0" left="0" right="0" height="50vh" backgroundColor="white" zIndex="overlay">
-            <Settings />
-          </Box>
-        )}
+      <VStack position="fixed" right="0" height="100vh" spacing={2}>
+        <Button onClick={toggleOpen} colorScheme="blue">
+          {isOpen ? "Close" : "Open"}
+        </Button>
       </VStack>
+      <>
+        <HStack width="100%" justify="center">
+          <CountDisplay counts={sessionCounts} title="Session Counts" style={{ transform: isOpen ? "translateY(-100%)" : "translateY(0)", transition: "transform 0.5s" }} />
+          <CountDisplay counts={cumulativeCounts} title="Cumulative Counts" style={{ transform: isOpen ? "translateY(100%)" : "translateY(0)", transition: "transform 0.5s" }} />
+        </HStack>
+        <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" zIndex="overlay">
+          <Settings />
+        </Box>
+      </>
+      <Button onClick={() => setIsOpen(false)} colorScheme="red" position="fixed" bottom="20px" right="20px">
+        Close Box
+      </Button>
     </VStack>
   );
 };

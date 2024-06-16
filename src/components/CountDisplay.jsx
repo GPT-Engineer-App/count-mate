@@ -3,7 +3,7 @@ import { Box, Text, Grid } from "@chakra-ui/react";
 
 const CountDisplay = ({ counts = {}, title }) => {
   return (
-    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+    <Box p={5} shadow="md" borderWidth="1px">
       {title && (
         <Text fontSize="xl" fontWeight="bold" mb={4}>
           {title}
